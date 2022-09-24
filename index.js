@@ -29,7 +29,7 @@ app.use(bodyParser.json())
 //import routes
 // require('./routes/adminRoute.js')(app)
 require('./routes/instructorRoute.js')(app)
-// require('./routes/studentRoute.js')(app)
+require('./routes/studentRoute.js')(app)
 require('./routes/usersRoute.js')(app)
 // require('./routes/workshopRoute.js')(app)
 
