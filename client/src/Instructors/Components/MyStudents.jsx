@@ -15,15 +15,15 @@ function MyStudents({ Instructor }) {
         // console.log(Instructor._id)
         if (Instructor._id) {
 
-            axios.get(`http://localhost:5000/MyStudents/${Instructor._id}`).then((response) => {
+            axios.get(`/MyStudents/${Instructor._id}`).then((response) => {
                 if (response.data.status != 200) {
-                    alert(response.data.err)
+                    alert(response.data.Message)
                     return;
                 }
                 else {
                     SetStudents(response.data.MyStudents)
                 }
-            })
+            }).catch((error) => alert(error))
         }
         else {
             window.location.href = './';

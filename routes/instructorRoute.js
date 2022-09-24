@@ -66,7 +66,7 @@ module.exports = (app) => {
     /*Input Instructor ID
     Response:1.(on success)status:200  InstructorObj UserObj
              2.(on fail)status:404 Message"User or Instructor Not found"
-             3.(on System error)status:-1  err
+             3.(on System error)status:-1  Message:err
     */
     app.get("/FindInstructorByID/:ID", async (request, response) => {
         try {
@@ -84,7 +84,7 @@ module.exports = (app) => {
             return response.send({ status: 404, Message: "Instructor Not Found" })
         }
         catch (err) {
-            return response.send({ status: -1, err })
+            return response.send({ status: -1, Message:err })
         }
     });
 
@@ -94,7 +94,7 @@ module.exports = (app) => {
               2.(on sucess){ status: 405, Message: "Instructor Name already Exists" }
               3.(on fail){ status: 404, Message: "No Instructor with this ID" }
               4.(on fail) Update User responses 
-              5.(on System error){ status: -1, error }
+              5.(on System error){ status: -1, Message:error }
      */
     app.put("/UpdateInstructor", async (request, response) => {
         try {
@@ -140,7 +140,7 @@ module.exports = (app) => {
             });
         }
         catch (error) {
-            return response.send({ status: -1, error })
+            return response.send({ status: -1, Message:error })
         }
     });
 
@@ -213,7 +213,7 @@ module.exports = (app) => {
             const ID = request.params.ID;//instrcutor ID
 
             //find the collection of thie instructor
-            const InstObj = InstrctorModel.find({ _id: ID })
+            const InstObj = await InstrctorModel.find({ _id: ID })
 
             if (InstObj.length <= 0)
                 return response.send({ status: 404, Message: "No Instructor with this ID" })
@@ -222,7 +222,7 @@ module.exports = (app) => {
             const WorkShops = InstObj[0].WorkShops
 
             //get all students
-            const Students = StudentModel.find({})
+            const Students =await StudentModel.find({})
 
             if (Students) {
                 //loop over all students

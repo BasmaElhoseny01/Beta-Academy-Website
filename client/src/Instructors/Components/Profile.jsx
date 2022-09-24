@@ -22,14 +22,14 @@ function Profile({ Instructor, User }) {
     // 👇️ prevent page refresh
     event.preventDefault();
 
-    axios.put("http://localhost:5000/UpdateInstructor", { Instructor: NewIntructor, User: NewUser }).then((response) => {
+    axios.put("/UpdateInstructor", { Instructor: NewIntructor, User: NewUser }).then((response) => {
       alert(response.data.Message)
 
       console.log('form submitted ✅');
       console.log(NewIntructor)
 
       window.location.href = './';
-    })
+    }).catch((error)=>alert(error))
   };
 
   return (

@@ -25,7 +25,7 @@ function Instructor() {
     useEffect(() => {
         //calling API to get Instrcutor Object
         axios.get(`/FindInstructorByID/${ID}`).then((response) => {
-            if (response.data.status === 404) {
+            if (response.data.status !=200) {
                 alert(response.data.Message)
                 return;
             }

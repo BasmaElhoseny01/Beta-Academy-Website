@@ -30,7 +30,7 @@ module.exports = (app) => {
                     let newUser;
                     await axios.post("http://localhost:5000/AddUser", { User_Name, Password, Type: "Student" }).then((res) => {
                         if (res.data.status != 200) {
-                            return response.send({ status: 402, Mesaage: res.data.Message })
+                            return response.send({ status: 402, Message: res.data.Message })
                         }
 
                         newUser = res.data.newUser;
@@ -55,9 +55,7 @@ module.exports = (app) => {
                     //3.Update User with the new aaded row id
                     const updateduserCollection = await UserModel.updateOne({ _id: newUser._id }, { $set: { User_ID: NewStudentobj._id } });
                     if (updateduserCollection.modifiedCount > 0) {
-                        response.send({ status: 200, Message: "Student Added Sucessfully", Student: NewStudentobj._id })
-
-                        return
+                        return response.send({ status: 200, Message: "Student Added Sucessfully", Student: NewStudentobj._id })                        
                     }
                     return response.send({ status: 402, Message: "Error Happend in Last Step" })
                 }

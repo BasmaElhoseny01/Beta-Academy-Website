@@ -53,7 +53,7 @@ function Signup() {
       alert("Please Fill Password fields")
       return
     }
-    axios.post("http://localhost:5000/AddStudent", { Name: NewStudent.Name, Mobile: NewStudent.Mobile, Email: NewStudent.Email, University: NewStudent.University, Faculty: NewStudent.Faculty, Department: NewStudent.Department, Academic_Year: NewStudent.Academic_Year, User_Name: NewStudent.User_Name, Password: NewStudent.Password }).then((response) => {
+    axios.post("/AddStudent", { Name: NewStudent.Name, Mobile: NewStudent.Mobile, Email: NewStudent.Email, University: NewStudent.University, Faculty: NewStudent.Faculty, Department: NewStudent.Department, Academic_Year: NewStudent.Academic_Year, User_Name: NewStudent.User_Name, Password: NewStudent.Password }).then((response) => {
 
 
       if (response.data.status === 200) {
@@ -66,7 +66,7 @@ function Signup() {
         alert(response.data.Message)
       }
 
-    })
+    }).catch((error)=>alert(error))
   }
 
   return (
@@ -205,7 +205,6 @@ function Signup() {
           </div>} />
         <Route path="/About" element={<About/>} />
       </Routes>
-      {/* <h1>{NewStudent.Name}</h1> */}
     </div>
   )
 }

@@ -26,7 +26,7 @@ function Login() {
     console.log(password)
     setPending(true)
     axios.get(`/Login/${UserName}/${password}`).then((response) => {
-      if (response.data.status === 404) {
+      if (response.data.status != 200) {
         alert(response.data.Message)
         setPending(false)
         return
