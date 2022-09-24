@@ -23,7 +23,7 @@ function Student() {
 
         useEffect(() => {
             //calling API to get Instrcutor Object
-            axios.get(`http://localhost:5000/FindStudentByID/${ID}`).then((response) => {
+            axios.get(`/FindStudentByID/${ID}`).then((response) => {
                 if (response.data.status === -1) {
                     console.log("err")
                     alert(response.data.err)
@@ -37,7 +37,7 @@ function Student() {
                 // console.log(response.data)
                 setStudent(response.data.Studentobj[0])
                 setUser(response.data.UserObj[0])
-            })
+            }).catch((error) => alert(error))
         }, [])
 
         return (
