@@ -1,40 +1,37 @@
+require("dotenv").config();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-require("dotenv").config();
+
 const cors = require("cors");
 
 const app = express();
 app.use(cors());
 
-require('./modles/Students');
-require('./modles/Instructors');
-require('./modles/Users');
-require('./modles/WorkShops');
+require('./modles/Student');
+require('./modles/Instructor');
+require('./modles/User');
+require('./modles/WorkShop');
 
 
 //Connection to DB
-mongoose.connect(
-    process.env.MONGODB_CONNECTION_STRING,
-    {
+mongoose.connect(process.env.MONGODB_CONNECTION_STRING,{
         useNewUrlParser: true,
         useUnifiedTopology: true,
-    }
-)
-
-    .then(() => console.log("MongoDB has been connected"))
-    .catch((err) => console.log(err));
+    }).then(() => console.log("MongoDB has been connected"))
+.catch((err) => console.log(err));
 
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 //import routes
-require('./routes/adminRoute.js')(app)
+// require('./routes/adminRoute.js')(app)
 require('./routes/instructorRoute.js')(app)
-require('./routes/studentRoute.js')(app)
+// require('./routes/studentRoute.js')(app)
 require('./routes/usersRoute.js')(app)
-require('./routes/workshopRoute.js')(app)
+// require('./routes/workshopRoute.js')(app)
 
 
 const PORT = process.env.PORT || 5000;
