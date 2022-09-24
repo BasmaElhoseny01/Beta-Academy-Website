@@ -34,6 +34,28 @@ module.exports = (app) => {
         }
     });
 
+    //B.Login
+    /*Input User_Name Password
+    Response:1.(on success)status:200 Type:student-Student-admin  User_ID 
+             2.(on fail)status:404 Message"Username or password is wrong"
+             3.(on system fail):{ status: -1, Message: error }
+    */
+    app.get('/Login/:User_Name/:Password', async (request, response) => {
+        try {
+            const User_Name = request.params.User_Name
+            const Password = request.params.Password
+
+            //go to DB and chek for this 
+            const UserCollection = await UserModel.findOne({ User_Name, Password })
+            if (UserCollection) {
+                return response.send({ status: 200, Type: UserCollection.Type, User_ID: UserCollection.User_ID })
+            }
+            return response.send({ status: 404, Message: "UserName or Password is Wrong" })
+        }
+        catch (error) {
+            return response.send({ status: -1, Message: error })
+        }
+    });
 
     //C. Update User [Note:User_Name is unique]
     /*Given User{} with _id and attribues which we want to be update rest are left unchanged
@@ -80,7 +102,47 @@ module.exports = (app) => {
             }
         }
         catch (error) {
-            return response.send({ status: -1, Message:error })
+            return response.send({ status: -1, Message: error })
+        }
+    });
+
+    //D.Find user by ID
+    /*Input:Id of User
+    response:(on fail):status:-1 Message:err
+             (on Sucess): status:200 UserObj 
+             (ID not found) status:404 Message:"User Not Found"
+    */
+    app.get("/FindUserByID/:ID", async (request, response) => {
+        try {
+            const ID = request.params.ID;
+            const UserObj = await UserModel.find({ _id: ID })
+            if (UserObj.length > 0)
+                return response.send({ status: 200, UserObj })
+            return response.send({ status: 404, Message: "User Not Found" })
+        }
+        catch (error) {
+            return response.send({ status: -1, Message: error })
+        }
+    });
+
+    //E. Delete User
+    /**input Id of user
+     * response: -(on fail):{status:404,Message:"No user Found with this iD"}
+     *           -(on sucess):{status:200,Message:"User Deleted Sucessfully"}
+     *           -(on sys fail):{status: -1, Message: error }
+    */
+    app.post('/DeleteUser', async (request, response) => {
+        try {
+            let { ID } = request.body;
+            const DeletedObj = await UserModel.deleteOne({ _id: ID })
+
+            if (DeletedObj.deletedCount > 0)
+                return response.send({ status: 200, Message: "User Deleted Sucessfully" })
+
+            return response.send({ status: 404, Message: "No user Found with this iD" })
+        }
+        catch (error) {
+            return response.send({ status: -1, Message: error })
         }
     });
 

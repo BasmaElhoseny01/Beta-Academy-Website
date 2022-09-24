@@ -1,0 +1,71 @@
+.InstructorCard {
+    width: 90%;
+    height: fit-content;
+
+    background-color: white;
+    border: 2px solid #082340;
+
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding: 5px;
+
+
+
+}
+
+.InstructorCard h2,
+h3 {
+    text-align: center;
+}
+
+.InstructorCardBody {
+    width: 100%;
+    height: fit-content;
+
+    padding: 10px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+
+}
+
+.InstructorCardBody p {
+    width: 45%;
+
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 12pt;
+
+    text-align: center;
+
+}
+
+.TableHeader {
+    background-color: wheat;
+    color:#082340
+}
+
+table {
+    margin: auto;
+    margin-top: 5px;
+    text-align: center;
+    border: 2px solid #082340;
+}
+
+table tbody:nth-child(even) {
+    background-color: #fff;
+    color: #082340;
+
+}
+table tbody:nth-child(odd) {
+    background-color: #082340;
+    color: #fff;
+}
+
+td{
+    padding: 2px;
+}

@@ -1,0 +1,81 @@
+.Profile{
+    width:60%;
+
+    
+    margin: 80px auto auto auto;
+
+    border: 2px solid #082340;
+    border-radius: 10px;
+}
+
+.RowProfile{
+    width:60%;
+
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    padding: 5px;
+
+    /* background-color: grey; */
+
+    display: flex;
+    flex-direction: row;
+    /* justify-content: center; */
+    align-items: center;
+
+}
+
+
+.RowProfile h4{
+    width:25%;
+}
+
+.RowProfile input{
+    width:40%;
+}
+
+
+.InfoShowProfile{
+    width:60%;
+}
+
+.InfoEditProfile{
+    text-decoration: underline;
+    color:blue;
+}
+
+.LineSplitterProfile{
+
+    width: 62%;
+    margin: auto;
+
+}
+
+.ProfileButtons{
+    width:95%;
+
+    margin: auto;
+    padding:10px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.ProfileButtons button{
+    width:100px;
+    padding: 5px;
+
+    border-radius: 5px;
+
+    border: 2px solid #082340;
+}
+
+.ProfileButtons button:hover{
+
+    background-color: greenyellow;
+    transition: 0.5s;
+
+}

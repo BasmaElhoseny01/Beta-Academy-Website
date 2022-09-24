@@ -1,0 +1,33 @@
+.HomeNavBar{
+    height:30px;
+    width: 100%;
+
+    background-color: #F3F3F3;
+
+    overflow: visible;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+
+    position: fixed;
+    top: 0;
+}
+
+
+.NavBarItems{
+    list-style: none;
+
+    width:15%;
+
+    display: flex ;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.NavBarItems li a{
+    text-decoration: none;
+    color: black;
+}

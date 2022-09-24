@@ -1,0 +1,58 @@
+.AdminHome{
+    margin: 80px auto 0px auto;
+}
+
+.RowProfileAdmin{
+    width:60%;
+
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    padding: 5px;
+
+    /* background-color: grey; */
+
+    display: flex;
+    flex-direction: row;
+    /* justify-content: center; */
+    align-items: center;
+
+}
+
+
+.RowProfileAdmin h4{
+    width:25%;
+}
+
+.RowProfileAdmin input,select{
+    width:55%;
+}
+
+.ProfileButtonsAdmin{
+    width:95%;
+
+    margin: auto;
+    padding:10px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.ProfileButtonsAdmin button{
+    width:120px;
+    padding: 5px;
+
+    border-radius: 5px;
+
+    border: 2px solid #082340;
+}
+
+.ProfileButtonsAdmin button:hover{
+
+    background-color: greenyellow;
+    transition: 0.5s;
+
+}

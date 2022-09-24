@@ -1,0 +1,71 @@
+.NavBar_Student{
+    height:30px;
+    width: 100%;
+
+    background-color: #F3F3F3;
+
+    overflow: visible;
+    
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+flex-wrap: wrap;
+    position: fixed;
+    top: 0;
+}
+.Logo{
+    width:60px;
+/* border: 2px solid black; */
+
+}
+.Logo:hover {
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0);
+    perspective: 1000px;
+
+      /* When the animation is finished, start again */
+  animation-iteration-count: infinite;
+  }
+
+@keyframes shake {
+    10%, 90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+    20%, 80% {
+      transform: translate3d(2px, 0, 0);
+    }
+    
+    30%, 50%, 70% {
+      transform: translate3d(-2px, 0, 0);
+    }
+    40%, 60% {
+      transform: translate3d(2px, 0, 0);
+  }
+}
+.NavBar_Student .NavBarIcons{
+  
+    width:40%;
+    height:100%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+
+    list-style: none;
+}
+
+
+/* ._1{  width:30%;}
+._2{width: 10%;} */
+
+.NavBar_Student .NavBarIcons a{
+    color: black;
+
+    text-decoration: none;
+}
+.Logout{
+  width:28px;
+}
