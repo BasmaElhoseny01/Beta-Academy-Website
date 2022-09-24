@@ -22,14 +22,14 @@ function Profile({ Student, User }) {
     // 👇️ prevent page refresh
     event.preventDefault();
 
-    axios.put("http://localhost:5000/UpdateStudent", { Student: NewStudent, User: NewUser }).then((response) => {
+    axios.put(`/UpdateStudent`, { Student: NewStudent, User: NewUser }).then((response) => {
       alert(response.data.Message)
 
       console.log('form submitted ✅');
       console.log(NewStudent)
 
       window.location.href = './';
-    })
+    }).catch((error) => alert(error))
   };
 
   return (

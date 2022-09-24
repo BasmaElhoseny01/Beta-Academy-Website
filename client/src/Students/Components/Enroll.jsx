@@ -12,13 +12,13 @@ function Enroll({ Student }) {
 
   useEffect(() => {
     //getting all WorkShops
-    axios.get('http://localhost:5000/FindWorkShops').then((response) => {
+    axios.get(`/FindWorkShops`).then((response) => {
       if (response.data.status == -1) {
         alert(response.data.Message)
       }
       else
         setWorkShops(response.data)
-    })
+    }).catch((error) => alert(error))
   }, [])
 
 
@@ -32,7 +32,7 @@ function Enroll({ Student }) {
     }
     else {
 
-      axios.put(`http://localhost:5000/Enroll`, { Student_ID: Student._id, WorkShop_ID: WorkshopID }).then((response) => {
+      axios.put(`/Enroll`, { Student_ID: Student._id, WorkShop_ID: WorkshopID }).then((response) => {
         // console.log(response.data) 
         if (response.data.status === -1) {
           console.log("err")
@@ -46,7 +46,7 @@ function Enroll({ Student }) {
         }
         alert(response.data.Message)
         window.location.href = './';
-      }, [])
+      }, []).catch((error) => alert(error))
     }
   }
   return (

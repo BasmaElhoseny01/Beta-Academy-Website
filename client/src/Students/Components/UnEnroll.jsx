@@ -7,14 +7,13 @@ function UnEnroll({ Student }) {
     // const [MyWorkshops,setMyWorkShops]=useState([]);
     const [WorkShopID, setWorkShopID] = useState("");
     useEffect(() => {
-        axios.get('http://localhost:5000/FindWorkShops').then((response) => {
+        axios.get(`/FindWorkShops`).then((response) => {
             if (response.data.status == -1) {
                 alert(response.data.Message)
             }
             else
                 setWorkShops(response.data)
-        })
-        console.log(Student)
+        }).catch((error) => alert(error))
         //   setWorkShops(Student.WorkShops)
     }, [])
 
@@ -28,7 +27,7 @@ function UnEnroll({ Student }) {
             return;
         }
         else {
-            axios.put(`http://localhost:5000/UnEnroll`, { Student_ID: Student._id, WorkShop_ID: WorkShopID }).then((response) => {
+            axios.put(`/UnEnroll`, { Student_ID: Student._id, WorkShop_ID: WorkShopID }).then((response) => {
                 if (response.data.status === -1) {
                     // console.log("err")
                     alert(response.data.err)
@@ -42,7 +41,7 @@ function UnEnroll({ Student }) {
                 alert(response.data.Message)
                 window.location.href = './';
 
-            }, [])
+            }, []).catch((error) => alert(error))
         }
     }
     let obj;
