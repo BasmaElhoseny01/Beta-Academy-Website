@@ -219,7 +219,7 @@ module.exports = (app) => {
                 return response.send({ status: 404, Message: "No Student with this ID" })
             }
     
-            await axios.put("/UpdateUser", { User }).then(async (res) => {
+            await axios.put("./UpdateUser", { User }).then(async (res) => {
                 if (res.data.status != 200) {
                     return response.send(res.data)
                 }
