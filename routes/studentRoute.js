@@ -212,13 +212,12 @@ module.exports = (app) => {
     })
 
     app.put(`/UpdateStudent`, async (request, response) => {
-        const { Student, User } = request.body
         try {
+            const { Student, User } = request.body
 
             const Student_Collection = await StudentModel.find({ _id: Student._id })
             if (Student_Collection.length <= 0) {
-                response.send({ status: 404, Message: "No Student with this ID" })
-                return
+                return response.send({ status: 404, Message: "No Student with this ID" })
             }
             await axios.put("http://localhost:5000/UpdateUser", { User }).then(async (res) => {
                 if (res.data.status != 200) {
