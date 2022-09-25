@@ -15,6 +15,7 @@ function About() {
       <img className='BackGround' src={BackGround} alt="Image"></img>
       <h2 className='WorkShopsContainerTitle'>About Beta</h2>
       <hr className='HorizontalLine' />
+     
       <div className='AboutBeta'>
         Beta is a Training Center that aims to develop students' skills in Technical & Non-technical in all Engineering Fields.
         Helping them by 4 Main Projects :
@@ -31,18 +32,9 @@ function About() {
         {Reviews.map((item) => {
 
           return (<div className="flip-card" key={++x}>
-             <h1>{item.auother}</h1>
-                <h3>{item.type}</h3>
-                <h3>  {item.Review}</h3>
-            {/* <div className="flip-card-inner">
-              <div className="flip-card-front">
-                <h1>{item.auother}</h1>
-                <h3>{item.type}</h3>
-              </div>
-              <div className="flip-card-back">
-                {item.Review}
-              </div>
-            </div> */}
+             <h2>{item.auother}</h2>
+                <h4>{item.type}</h4>
+                <h6>{item.Review}</h6>
           </div>)
         })}
 

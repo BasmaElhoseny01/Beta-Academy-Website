@@ -1,19 +1,19 @@
 let Reviews=[
     {
-        "auother":"Basma Elhoseny",
-        "Review":"asdfghjiokytrerdghjk,kjhgfyugkjnn jhdfhmn drmnf vzrdm,f  .dfvjmgrvfmked.Really i enjoed",
+        "auother":"Zeianb Moawad fayez",
+        "Review":"Great Experince , I leanred new things and apply on it in mini tasks . final project test my skills and improve it",
         "type":"Student"
     },
 
     {
         "auother":"Basma Elhoseny",
-        "Review":"كمالبلاىلارلاينترةىءيتبن ش قةىقيب ربءؤ ييبؤئ يبؤى  بر",
-        "type":"Teacher"
+        "Review":"I learnt alot with you thank you all for and thanks for our talented instructor Mazen",
+        "type":"Student"
     },
     {
-        "auother":"Basma Elhoseny",
-        "Review":"asdfghjiokytrerdghjk,kjhgfyugkjnn jhdfhmn drmnf vzrdm,f  .dfvjmgrvfmked.Really i enjoed",
-        "type":"Parent"
+        "auother":"Mazen Fayez",
+        "Review":"I really enjoed working with you all",
+        "type":"Instructor"
     }
     
     
