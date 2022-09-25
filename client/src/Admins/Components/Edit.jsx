@@ -36,7 +36,7 @@ function Edit({ User }) {
 
                 <div className='RowProfile'>
                     <h4>Password</h4>
-                    <p className='InfoShowProfile'>{User.Password ? "●".repeat(User.Password.length) : ""}</p>
+                    <p className='InfoShowProfile'>{User.Password ? "●".repeat(4) : ""}</p>
                 </div>
 
                 <div className="ProfileButtons">
@@ -67,7 +67,7 @@ function Edit({ User }) {
                     <h4>Password</h4>
                     <input
                         type="password"
-                        placeholder={User.Password ? "●".repeat(User.Password.length) : ""}
+                        placeholder={User.Password ? "●".repeat(4) : ""}
                         onChange={event => {
                             const x = event.target.value.trim()
                             let dumm

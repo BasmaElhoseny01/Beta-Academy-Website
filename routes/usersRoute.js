@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const UserModel = mongoose.model("Users")
 
+const bcrypt = require("bcrypt")
 module.exports = (app) => {
     //A. Add new User
     /*Input User_Name Password
@@ -17,6 +18,8 @@ module.exports = (app) => {
                 return response.send({ status: 402, Message: "Username Already Exists", newUser: UserObj })
 
             //else unique username
+            const salt = await bcrypt.genSalt(10)
+            Password = await bcrypt.hash(Password, salt);
             const newUser = new UserModel({
                 User_Name,
                 Password,
@@ -46,11 +49,14 @@ module.exports = (app) => {
             const Password = request.params.Password
 
             //go to DB and chek for this 
-            const UserCollection = await UserModel.findOne({ User_Name, Password })
+            const UserCollection = await UserModel.findOne({ User_Name })
             if (UserCollection) {
-                return response.send({ status: 200, Type: UserCollection.Type, User_ID: UserCollection.User_ID })
+                const ValidPassword = await bcrypt.compare(Password, UserCollection.Password)
+                if (ValidPassword)
+                    return response.send({ status: 200, Type: UserCollection.Type, User_ID: UserCollection.User_ID })
+                return response.send({ status: 404, Message: "Password is Wrong" })
             }
-            return response.send({ status: 404, Message: "UserName or Password is Wrong" })
+            return response.send({ status: 404, Message: "UserName is Wrong" })
         }
         catch (error) {
             return response.send({ status: -1, Message: error })
