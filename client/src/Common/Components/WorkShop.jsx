@@ -32,7 +32,7 @@ function WorkShop({ WorkShopID, SeeFlag, WorkShop }) {
             }
             //get instructor
             //calling API to get Instrcutor Object
-            axios.get(`http://localhost:5000/FindInstructorByID/${WorkShop.Instructor_ID}`).then((response) => {
+            axios.get(`/FindInstructorByID/${WorkShop.Instructor_ID}`).then((response) => {
                 // console.log(response)
                 if (response.data.status === -1) {
                     alert(response.err)
@@ -43,11 +43,11 @@ function WorkShop({ WorkShopID, SeeFlag, WorkShop }) {
                     return;
                 }
                 setInstructor(response.data.InstructorObj[0])
-            })
+            }).catch((error) => alert(error))
 
         }
         else { //get workshop
-            axios.get(`http://localhost:5000/FindWorkShopByID/${WorkShopID}`).then((response) => {
+            axios.get(`/FindWorkShopByID/${WorkShopID}`).then((response) => {
                 if (response.data.status !== 200) {
                 
                     alert(response.data.Message)
@@ -68,7 +68,7 @@ function WorkShop({ WorkShopID, SeeFlag, WorkShop }) {
                 else if (response.data.WorkShopObj[0].Status == "Full")
                     setStatus("🔴 Full")
 
-            })
+            }).catch((error) => alert(error))
         }
     }, [])
 

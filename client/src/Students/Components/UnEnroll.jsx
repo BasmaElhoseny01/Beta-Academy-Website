@@ -9,10 +9,15 @@ function UnEnroll({ Student }) {
     useEffect(() => {
         axios.get(`/FindWorkShops`).then((response) => {
             if (response.data.status == -1) {
+                console.log('status in find UnEnroll');
                 alert(response.data.Message)
+                return;
             }
-            else
-                setWorkShops(response.data)
+            else{ console.log(' find UnEnroll');
+            setWorkShops(response.data)
+            return;
+        }
+             
         }).catch((error) => alert(error))
         //   setWorkShops(Student.WorkShops)
     }, [])
@@ -30,16 +35,21 @@ function UnEnroll({ Student }) {
             axios.put(`/UnEnroll`, { Student_ID: Student._id, WorkShop_ID: WorkShopID }).then((response) => {
                 if (response.data.status === -1) {
                     // console.log("err")
+                    console.log("err status in Unenroll")
                     alert(response.data.err)
                     return;
                 }
                 else if (response.data.status === 404) {
                     console.log("404")
                     alert(response.data.Message)
+                    console.log("404 status in Unenroll")
                     return;
                 }
                 alert(response.data.Message)
+                console.log("Message in Unenroll")
                 window.location.href = './';
+          
+                return;
 
             }, []).catch((error) => alert(error))
         }

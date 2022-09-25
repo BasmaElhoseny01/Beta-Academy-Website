@@ -13,14 +13,14 @@ function AllCourses({flag}) {
 
     //get all courses
     useEffect(() => {
-        axios.get(`http://localhost:5000/FindWorkShops`).then((response) => {
+        axios.get(`/FindWorkShops`).then((response) => {
             if (response.data.status == -1) {
                 alert(response.err)
                 console.log(response)
                 return;
             }
             setCourses(response.data)
-        })
+        }).catch((error) => alert(error))
 
     }, [])
 
