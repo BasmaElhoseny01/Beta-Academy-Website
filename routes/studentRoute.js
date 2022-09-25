@@ -111,8 +111,8 @@ module.exports = (app) => {
                     //1.add user
                     let newUser;
                     // await axios.post("http://localhost:5000/AddUser", { User_Name, Password, Type: "Student" }).then((res) => {
-                    let res = addUserFunction(User_Name, Password, "Student");
-                    if ((await res).status != 200) {
+                    let res = await addUserFunction(User_Name, Password, "Student");
+                    if (res.status != 200) {
                         return response.send(res)
                     }
                     else {
