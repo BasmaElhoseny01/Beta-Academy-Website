@@ -13,7 +13,7 @@ module.exports = (app) => {
     //A.Add Student
     app.post("/AddStudent", async (request, response) => {
         try {
-            
+
             let { Name, Mobile, Email, University, Faculty, Department, Academic_Year, User_Name, Password } = request.body;
             const UserObj = await UserModel.find({ User_Name });
             if (UserObj.length > 0)
@@ -55,7 +55,7 @@ module.exports = (app) => {
                     //3.Update User with the new aaded row id
                     const updateduserCollection = await UserModel.updateOne({ _id: newUser._id }, { $set: { User_ID: NewStudentobj._id } });
                     if (updateduserCollection.modifiedCount > 0) {
-                        return response.send({ status: 200, Message: "Student Added Sucessfully", Student: NewStudentobj._id })                        
+                        return response.send({ status: 200, Message: "Student Added Sucessfully", Student: NewStudentobj._id })
                     }
                     return response.send({ status: 402, Message: "Error Happend in Last Step" })
                 }
@@ -181,23 +181,23 @@ module.exports = (app) => {
         try {
             const { Student_ID, WorkShop_ID } = request.body
             const Workshop = await WorkShopModel.find({ _id: WorkShop_ID });
-            
-            if (Workshop.length < 0) 
+
+            if (Workshop.length < 0)
                 return response.send({ status: 404, Message: "No WorkShop with this id" });
 
             const Studentquery = await StudentModel.updateOne({ _id: Student_ID }, { $addToSet: { WorkShops: WorkShop_ID } });
-            if (Studentquery.matchedCount <= 0) 
-               return response.send({ status: 404, Message: "No Student with this id" });
-                
-            if (Studentquery.modifiedCount <= 0) 
-              return  response.send({ status: 200, Message: "This student is already enrolled in this Workshop" });
+            if (Studentquery.matchedCount <= 0)
+                return response.send({ status: 404, Message: "No Student with this id" });
+
+            if (Studentquery.modifiedCount <= 0)
+                return response.send({ status: 200, Message: "This student is already enrolled in this Workshop" });
 
             //else done 
             //add Thus student to WorkShop
 
             const WorkShopquery = await WorkShopModel.updateOne({ _id: WorkShop_ID }, { $addToSet: { EnrolledStudents: Student_ID } })
             if (WorkShopquery.modifiedCount > 0)
-               return response.send({ status: 200, Message: "Enrolled in WorkShop Sucessfully" });
+                return response.send({ status: 200, Message: "Enrolled in WorkShop Sucessfully" });
         } catch (error) {
             return response.send(error)
         }
@@ -207,40 +207,39 @@ module.exports = (app) => {
     //G.UnEnroll
     /*Input : Student_ID WorkShop_ID
     response:-(on fail) status: 404, Message: "No Student with this id" 
+             -(on sys fail){status:-1,Message:error}
              -(on success)  status: 200, Message: "This Student isn't Enrolled in this work shop" or
     */
     app.put("/UnEnroll", async (request, response) => {
         const { Student_ID, WorkShop_ID } = request.body
         try {
             const StudentQuery = await StudentModel.updateMany({ _id: Student_ID }, { $pull: { WorkShops: WorkShop_ID } })
-            if (StudentQuery.matchedCount < 0)
-            return response.send({ status: 404, Message: "No Student with this id" });
-                
-            else if (StudentQuery.modifiedCount <= 0) 
-            return response.send({ status: 200, Message: "This Student isn't Enrolled in this work shop" });
-                
+            if (StudentQuery.matchedCount <= 0) {
+                return response.send({ status: 404, Message: "No Student with this id" })
+            }
+            else if (StudentQuery.modifiedCount <= 0) {
+                return response.send({ status: 200, Message: "This Student isn't Enrolled in this work shop" })
+            }
             else {
                 //done
                 //remove this Student from WorkShop
                 const WorkShopQuery = await WorkShopModel.updateMany({ _id: WorkShop_ID }, { $pull: { EnrolledStudents: Student_ID } })
-                if (WorkShopQuery.matchedCount < 0) 
-                return response.send({ status: 404, Message: "No WorkShop with this id" });
-                
-                
-                else if (WorkShopQuery.modifiedCount <= 0) 
-                return response.send({ status: 200, Message: "This Student isn't Enrolled in this work shop" });
-
+                if (WorkShopQuery.matchedCount <= 0) {
+                    return response.send({ status: 404, Message: "No WorkShop with this id" })
+                }
+                else if (WorkShopQuery.modifiedCount <= 0) {
+                    return response.send({ status: 200, Message: "This Student isn't Enrolled in this work shop" })
+                }
                 else {
                     //done
                     return response.send({ status: 200, Message: "Student Unenrolled successfully" })
-
                 }
             }
         } catch (error) {
-            return response.send(error)
+            return response.send({ status: -1, Message: error })
         }
     })
-
+    
     app.put(`/UpdateStudent`, async (request, response) => {
         const { Student, User } = request.body
         try {
@@ -250,36 +249,36 @@ module.exports = (app) => {
                 response.send({ status: 404, Message: "No Student with this ID" })
                 return
             }
-             await axios.put("http://localhost:5000/UpdateUser", { User }).then(async (res) => {
+            await axios.put("http://localhost:5000/UpdateUser", { User }).then(async (res) => {
                 if (res.data.status != 200) {
                     return response.send({ status: 402, Mesaage: res.data.Message })
                 }
 
-               else{
-                if (Student.Name) {
-                    const NameStudentCollection = await StudentModel.find({ Name: Student.Name })
-                    if (NameStudentCollection.length > 0) {
-                        if (Student._id == NameStudentCollection[0]._id) {
-                            //he uses his old name no problem
+                else {
+                    if (Student.Name) {
+                        const NameStudentCollection = await StudentModel.find({ Name: Student.Name })
+                        if (NameStudentCollection.length > 0) {
+                            if (Student._id == NameStudentCollection[0]._id) {
+                                //he uses his old name no problem
+                                const updatedStudentrCollection = await StudentModel.findByIdAndUpdate({ _id: Student._id }, { $set: Student })
+                                response.send({ status: 200, Message: "Student Updated Sucessfully" })
+                            }
+                            else {
+                                response.send({ status: 405, Message: "Student Name already Exists" })
+                            }
+                        }
+                        else {
+                            //completey new Name
                             const updatedStudentrCollection = await StudentModel.findByIdAndUpdate({ _id: Student._id }, { $set: Student })
                             response.send({ status: 200, Message: "Student Updated Sucessfully" })
                         }
-                        else {
-                            response.send({ status: 405, Message: "Student Name already Exists" })
-                        }
                     }
                     else {
-                        //completey new Name
+                        //No change in name update directly
                         const updatedStudentrCollection = await StudentModel.findByIdAndUpdate({ _id: Student._id }, { $set: Student })
                         response.send({ status: 200, Message: "Student Updated Sucessfully" })
                     }
                 }
-                else {
-                    //No change in name update directly
-                    const updatedStudentrCollection = await StudentModel.findByIdAndUpdate({ _id: Student._id }, { $set: Student })
-                    response.send({ status: 200, Message: "Student Updated Sucessfully" })
-                }
-               }
             })
         } catch (error) {
             return response.send(error)
