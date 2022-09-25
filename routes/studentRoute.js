@@ -8,6 +8,33 @@ const cors = require("cors");
 const app = express();
 app.use(cors());
 require('./usersRoute')(app)
+const addUserFunction=async(User_Name, Password, Type )=>{
+    try {
+        // let { User_Name, Password, Type } = request.body;
+        //check if user_Name alreadyExists
+        const UserObj = await UserModel.find({ User_Name });
+        if (UserObj.length > 0)
+            return ({ status: 402, Message: "Username Already Exists", newUser: UserObj })
+
+        //else unique username
+        const salt = await bcrypt.genSalt(10)
+        Password = await bcrypt.hash(Password, salt);
+        const newUser = new UserModel({
+            User_Name,
+            Password,
+            Type
+        })
+        await newUser.save()
+
+        newUser.User_ID = newUser._id
+        await newUser.save()
+
+        return ({ status: 200, Message: "User Added sucessfully", newUser })
+    }
+    catch (error) {
+        return ({ status: -1, Message: error })
+    }
+}
 module.exports = (app) => {
 
     //A.Add Student
@@ -219,9 +246,10 @@ module.exports = (app) => {
                 return response.send({ status: 404, Message: "No Student with this ID" })
             }
     
-            await axios.put("./UpdateUser", { User }).then(async (res) => {
-                if (res.data.status != 200) {
-                    return response.send(res.data)
+            // await axios.put("./UpdateUser", { User }).then(async (res) => {
+                const res= addUserFunction(User.User_Name,User.Password,User.Type);
+                if ((await res).status != 200) {
+                    return response.send(res)
                 }
                 else {
                     if (Student.Name) {
@@ -248,7 +276,7 @@ module.exports = (app) => {
                        return response.send({ status: 200, Message: "Student Updated Sucessfully" })
                     }
                 }
-            })
+            // })
         } catch (error) {
             return response.send({status:-1,Message:error})
         }
