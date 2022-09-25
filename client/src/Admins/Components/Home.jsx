@@ -37,6 +37,8 @@ function Home({ User }) {
     const [Admins, setAdmins] = useState([])
     const [AdminDeleted, setAdminDeleted] = useState("")
 
+    const [ResetedUser, setResetUser] = useState("")
+
     useEffect(() => {
         setNewWorkShop({ Name: "", Field: "", StartDate: "", Duration: "", SessionsPerWeek: "", SessionTime: "", Instructor_ID: "", Location: "", Price: "", MaxCapacity: "", Status: "" })
         //getting all instructors
@@ -222,6 +224,22 @@ function Home({ User }) {
             }).catch((error) => alert(error))
         }
 
+    }
+
+    const ResetUser = (event) => {
+        // 👇️ prevent page refresh
+        event.preventDefault();
+        if (ResetedUser === "") {
+            alert("Please Fill All fields")
+            return
+        }
+        else {
+            axios.put(`/ResetUser`, { User_Name: ResetedUser }).then((response) => {
+                alert(response.data.Message)
+                if (response.data.status == 200)
+                    window.location.reload();
+            }).catch((error) => alert(error))
+        }
     }
 
     return (
@@ -796,6 +814,26 @@ function Home({ User }) {
 
                 <div className="ProfileButtonsAdmin">
                     <button type='submit'>Delete Admin</button>
+                </div>
+            </form>
+            {/* ************************************************************************************************************* */}
+
+            <form onSubmit={ResetUser}>
+                <h2 className='WorkShopsContainerTitle'>Reset Password</h2>
+                <hr className='HorizontalLine' />
+                <div className='RowProfileAdmin'>
+                    <h4>User Name</h4>
+                    <input
+                        type="text"
+                        placeholder="Ali_Gamal03"
+                        onChange={event => {
+                            setResetUser(event.target.value.trim())
+                        }}
+                    />
+                </div>
+
+                <div className="ProfileButtonsAdmin">
+                    <button type='submit'>Reset</button>
                 </div>
             </form>
 

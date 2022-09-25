@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 
 function Logout() {
   useEffect(() => {
-    localStorage.removeItem("user")//remove user from local storgae
+    localStorage.removeItem("Beta_user")//remove user from local storgae
 
     window.location.href = "/Login"
 

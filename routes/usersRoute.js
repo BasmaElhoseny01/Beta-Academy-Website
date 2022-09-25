@@ -65,7 +65,7 @@ module.exports = (app) => {
 
     //C. Update User [Note:User_Name is unique]
     /*Given User{} with _id and attribues which we want to be update rest are left unchanged
-    Response:1.(on success){ status: 200, Message: "User Updated Sucessfully", updatedUserCollection }
+    Response:1.(on success){ status: 200, Message: "User Updated Sucessfully", updatedUser/Collection }
              2.(on fail) { status: 405, Message: "User Name already Exists" }
              3.(on fail){ status: 404, Message: "No user with this ID" }
              4. (on sysytem error){ status: -1, Message:error }
@@ -83,6 +83,8 @@ module.exports = (app) => {
                         //checkif not used by any one else
                         if (user_NameCollection[0]._id == User._id)//he repeatedsame user name =>no problem
                         {
+                            const salt = await bcrypt.genSalt(10)
+                            User.Password = await bcrypt.hash(User.Password, salt);
                             const updatedUserCollection = await UserModel.findByIdAndUpdate({ _id: User._id }, { $set: User })
                             return response.send({ status: 200, Message: "User Updated Sucessfully", updatedUserCollection })
                         }
@@ -93,12 +95,16 @@ module.exports = (app) => {
                     }
                     else {
                         //new user name==> add directly
+                        const salt = await bcrypt.genSalt(10)
+                        User.Password = await bcrypt.hash(User.Password, salt);
                         const updatedUserCollection = await UserModel.findByIdAndUpdate({ _id: User._id }, { $set: User })
                         return response.send({ status: 200, Message: "User Updated Sucessfully", updatedUserCollection })
                     }
                 }
                 else {
                     //no change in user Name ==>update direclty
+                    const salt = await bcrypt.genSalt(10)
+                    User.Password = await bcrypt.hash(User.Password, salt);
                     const updatedUserCollection = await UserModel.findByIdAndUpdate({ _id: User._id }, { $set: User })
                     return response.send({ status: 200, Message: "User Updated Sucessfully", updatedUserCollection })
                 }
@@ -146,6 +152,32 @@ module.exports = (app) => {
                 return response.send({ status: 200, Message: "User Deleted Sucessfully" })
 
             return response.send({ status: 404, Message: "No user Found with this iD" })
+        }
+        catch (error) {
+            return response.send({ status: -1, Message: error })
+        }
+    });
+
+
+    //F. Reset User Password [Note:User_Name is unique]
+    /*Given User_Name
+    Response:1.(on success):{ status: 200, Message: "User Updated Sucessfully" }
+             2.(on fail):{ status: 404, Message: "User_Name doesn't exist" }
+             3. (on sysytem error){ status: -1, Message: error }
+    */
+    app.put("/ResetUser", async (request, response) => {
+        try {
+            const { User_Name } = request.body
+            const user_NameCollection = await UserModel.find({ User_Name })
+            // return response.send(user_NameCollection)
+            if (user_NameCollection.length <= 0)
+                return response.send({ status: 404, Message: "User_Name doesn't exist" })
+
+            const salt = await bcrypt.genSalt(10)
+            const Password = await bcrypt.hash("0000", salt);
+            await UserModel.findByIdAndUpdate({ _id: user_NameCollection[0]._id }, { $set: { Password: Password } })
+
+            return response.send({ status: 200, Message: "User Updated Sucessfully" })
         }
         catch (error) {
             return response.send({ status: -1, Message: error })
