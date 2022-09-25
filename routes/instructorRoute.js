@@ -34,11 +34,18 @@ module.exports = (app) => {
             if (InstructorObj.length > 0)
                 return response.send({ status: 402, Message: "Instructor Name Already Exists" })
             //else unique 
-            await axios.post("http://localhost:5000/AddUser", { User_Name, Password: "0000", Type: "Instructor" }).then(async (APIresponse) => {
-                if (APIresponse.data.status != 200) {
-                    return response.send(APIresponse.data)
+            // await axios.post("http://localhost:5000/AddUser", { User_Name, Password: "0000", Type: "Instructor" }).then(async (APIresponse) => {
+            //     if (APIresponse.data.status != 200) {
+            //         return response.send(APIresponse.data)
+            //     }
+            let newUser;
+            let res = addUserFunction( User_Name, Password,"Student");
+            if ((await res).status != 200) {
+                return response.send(res)
+            }
+            else{
+                newUser = res.newUser;
                 }
-                const newUser = APIresponse.data.newUser;
 
                 //2.Add Instructor
                 const newInstructor = new InstrctorModel({
@@ -57,7 +64,7 @@ module.exports = (app) => {
                     return response.send({ status: 200, Message: "Instructor Added Sucessfully" })
                 }
                 return response.send({ status: 402, Message: "Error Happend in Last Step" })
-            })
+           // })
         }
         catch (error) {
             return response.send({ status: -1, Message: error })
