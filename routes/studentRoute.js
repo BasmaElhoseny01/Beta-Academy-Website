@@ -8,31 +8,88 @@ const cors = require("cors");
 const app = express();
 app.use(cors());
 require('./usersRoute')(app)
-const addUserFunction=async(User_Name, Password, Type )=>{
+const addUserFunction = async (User_Name, Password, Type) => {
     try {
         // let { User_Name, Password, Type } = request.body;
         //check if user_Name alreadyExists
+
         const UserObj = await UserModel.find({ User_Name });
+
         if (UserObj.length > 0)
             return ({ status: 402, Message: "Username Already Exists", newUser: UserObj })
 
         //else unique username
-        const salt = await bcrypt.genSalt(10)
-        Password = await bcrypt.hash(Password, salt);
+        if (Password) {
+            const salt = await bcrypt.genSalt(10)
+            Password = await bcrypt.hash(Password, salt);
+        }
         const newUser = new UserModel({
             User_Name,
             Password,
-            Type
+            Type: Type
         })
         await newUser.save()
+        return "1010"
 
         newUser.User_ID = newUser._id
         await newUser.save()
 
-        return ({ status: 200, Message: "User Added sucessfully", newUser })
+        // return ({ status: 200, Message: "User Added sucessfully", newUser })
     }
     catch (error) {
         return ({ status: -1, Message: error })
+    }
+}
+const UpdateUserFunction = async (User) => {
+    try {
+        // const { User } = request.body
+        const user_NameCollection = await UserModel.find({ _id: User._id })
+        if (user_NameCollection.length > 0) {
+            //is User_Name Updated
+            if (User.User_Name) {
+                const user_NameCollection = await UserModel.find({ User_Name: User.User_Name })
+                if (user_NameCollection.length > 0) {
+                    //checkif not used by any one else
+                    if (user_NameCollection[0]._id == User._id)//he repeatedsame user name =>no problem
+                    {
+                        if (User.Password) {
+                            const salt = await bcrypt.genSalt(10)
+                            User.Password = await bcrypt.hash(User.Password, salt);
+                        }
+                        const updatedUserCollection = await UserModel.findByIdAndUpdate({ _id: User._id }, { $set: User })
+                        return { status: 200, Message: "User Updated Sucessfully", updatedUserCollection }
+                    }
+                    else {
+                        //this user name is used by another user
+                        return { status: 405, Message: "User Name already Exists" }
+                    }
+                }
+                else {
+                    //new user name==> add directly
+                    if (User.Password) {
+                        const salt = await bcrypt.genSalt(10)
+                        User.Password = await bcrypt.hash(User.Password, salt);
+                    }
+                    const updatedUserCollection = await UserModel.findByIdAndUpdate({ _id: User._id }, { $set: User })
+                    return { status: 200, Message: "User Updated Sucessfully", updatedUserCollection }
+                }
+            }
+            else {
+                //no change in user Name ==>update direclty
+                if (User.Password) {
+                    const salt = await bcrypt.genSalt(10)
+                    User.Password = await bcrypt.hash(User.Password, salt);
+                }
+                const updatedUserCollection = await UserModel.findByIdAndUpdate({ _id: User._id }, { $set: User })
+                return { status: 200, Message: "User Updated Sucessfully", updatedUserCollection }
+            }
+        }
+        else {
+            return { status: 404, Message: "No user with this ID" }
+        }
+    }
+    catch (error) {
+        return response.send({ status: -1, Message: error })
     }
 }
 module.exports = (app) => {
@@ -102,15 +159,15 @@ module.exports = (app) => {
                 //get User
                 const UserObj = await UserModel.find({ _id: Studentobj[0].User_ID })
                 if (UserObj.length >= 0) {
-                   return response.send({ status: 200, Studentobj, UserObj })
+                    return response.send({ status: 200, Studentobj, UserObj })
                 }
                 else //not found
-                 return response.send({ status: 404, Message: "User Not Found" })
+                    return response.send({ status: 404, Message: "User Not Found" })
 
 
             }
             else //not found
-              return response.send({ status: 404, Message: "Student Not Found" })
+                return response.send({ status: 404, Message: "Student Not Found" })
 
         } catch (error) {
             return response.send({ status: -1, error })
@@ -157,11 +214,11 @@ module.exports = (app) => {
             if (StudentObj.length > 0) {
                 const StudentsObj = await StudentModel.find({ WorkShops: { $in: StudentObj[0].WorkShops } })
                 if (StudentsObj.length >= 0)
-                return response.send({ stauts: 200, StudentsObj })
+                    return response.send({ stauts: 200, StudentsObj })
             }
 
             else //not found
-              return response.send({ status: 404, message: "Student Not Found" })
+                return response.send({ status: 404, message: "Student Not Found" })
         } catch (error) {
             return response.send({ status: -1, error })
         }
@@ -245,40 +302,39 @@ module.exports = (app) => {
             if (Student_Collection.length <= 0) {
                 return response.send({ status: 404, Message: "No Student with this ID" })
             }
-    
             // await axios.put("./UpdateUser", { User }).then(async (res) => {
-                const res= addUserFunction(User.User_Name,User.Password,User.Type);
-                if ((await res).status != 200) {
-                    return response.send(res)
-                }
-                else {
-                    if (Student.Name) {
-                        const NameStudentCollection = await StudentModel.find({ Name: Student.Name })
-                        if (NameStudentCollection.length > 0) {
-                            if (Student._id == NameStudentCollection[0]._id) {
-                                //he uses his old name no problem
-                                const updatedStudentrCollection = await StudentModel.findByIdAndUpdate({ _id: Student._id }, { $set: Student })
-                              return response.send({ status: 200, Message: "Student Updated Sucessfully" })
-                            }
-                            else {
-                               return response.send({ status: 405, Message: "Student Name already Exists" })
-                            }
+            let res = UpdateUserFunction(User);
+            if ((await res).status != 200) {
+                return response.send(res)
+            }
+            else {
+                if (Student.Name) {
+                    const NameStudentCollection = await StudentModel.find({ Name: Student.Name })
+                    if (NameStudentCollection.length > 0) {
+                        if (Student._id == NameStudentCollection[0]._id) {
+                            //he uses his old name no problem
+                            const updatedStudentrCollection = await StudentModel.findByIdAndUpdate({ _id: Student._id }, { $set: Student })
+                            return response.send({ status: 200, Message: "Student Updated Sucessfully" })
                         }
                         else {
-                            //completey new Name
-                            const updatedStudentrCollection = await StudentModel.findByIdAndUpdate({ _id: Student._id }, { $set: Student })
-                           return response.send({ status: 200, Message: "Student Updated Sucessfully" })
+                            return response.send({ status: 405, Message: "Student Name already Exists" })
                         }
                     }
                     else {
-                        //No change in name update directly
+                        //completey new Name
                         const updatedStudentrCollection = await StudentModel.findByIdAndUpdate({ _id: Student._id }, { $set: Student })
-                       return response.send({ status: 200, Message: "Student Updated Sucessfully" })
+                        return response.send({ status: 200, Message: "Student Updated Sucessfully" })
                     }
                 }
+                else {
+                    //No change in name update directly
+                    const updatedStudentrCollection = await StudentModel.findByIdAndUpdate({ _id: Student._id }, { $set: Student })
+                    return response.send({ status: 200, Message: "Student Updated Sucessfully" })
+                }
+            }
             // })
         } catch (error) {
-            return response.send({status:-1,Message:error})
+            return response.send({ status: -1, Message: error })
         }
     })
 
