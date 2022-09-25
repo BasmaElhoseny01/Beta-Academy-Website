@@ -75,15 +75,15 @@ module.exports = (app) => {
                 //get User
                 const UserObj = await UserModel.find({ _id: Studentobj[0].User_ID })
                 if (UserObj.length >= 0) {
-                    response.send({ status: 200, Studentobj, UserObj })
+                   return response.send({ status: 200, Studentobj, UserObj })
                 }
                 else //not found
-                    response.send({ status: 404, Message: "User Not Found" })
+                 return response.send({ status: 404, Message: "User Not Found" })
 
 
             }
             else //not found
-                response.send({ status: 404, Message: "Student Not Found" })
+              return response.send({ status: 404, Message: "Student Not Found" })
 
         } catch (error) {
             return response.send({ status: -1, error })
@@ -130,11 +130,11 @@ module.exports = (app) => {
             if (StudentObj.length > 0) {
                 const StudentsObj = await StudentModel.find({ WorkShops: { $in: StudentObj[0].WorkShops } })
                 if (StudentsObj.length >= 0)
-                    response.send({ stauts: 200, StudentsObj })
+                return response.send({ stauts: 200, StudentsObj })
             }
 
             else //not found
-                response.send({ status: 404, message: "Student Not Found" })
+              return response.send({ status: 404, message: "Student Not Found" })
         } catch (error) {
             return response.send({ status: -1, error })
         }
@@ -232,22 +232,22 @@ module.exports = (app) => {
                             if (Student._id == NameStudentCollection[0]._id) {
                                 //he uses his old name no problem
                                 const updatedStudentrCollection = await StudentModel.findByIdAndUpdate({ _id: Student._id }, { $set: Student })
-                                response.send({ status: 200, Message: "Student Updated Sucessfully" })
+                              return response.send({ status: 200, Message: "Student Updated Sucessfully" })
                             }
                             else {
-                                response.send({ status: 405, Message: "Student Name already Exists" })
+                               return response.send({ status: 405, Message: "Student Name already Exists" })
                             }
                         }
                         else {
                             //completey new Name
                             const updatedStudentrCollection = await StudentModel.findByIdAndUpdate({ _id: Student._id }, { $set: Student })
-                            response.send({ status: 200, Message: "Student Updated Sucessfully" })
+                           return response.send({ status: 200, Message: "Student Updated Sucessfully" })
                         }
                     }
                     else {
                         //No change in name update directly
                         const updatedStudentrCollection = await StudentModel.findByIdAndUpdate({ _id: Student._id }, { $set: Student })
-                        response.send({ status: 200, Message: "Student Updated Sucessfully" })
+                       return response.send({ status: 200, Message: "Student Updated Sucessfully" })
                     }
                 }
             })

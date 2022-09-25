@@ -82,7 +82,7 @@ function Enroll({ Student }) {
           }>
             <option value="default" disabled>Select WorkShop</option>
             {WorkShops ? WorkShops.map((workshop) => {
-              return (<option value={workshop._id} key={workshop._id} disabled={workshop.Status != "Avaliable"}>{workshop.Name}</option>)
+              return (<option value={workshop._id} key={workshop._id} disabled={workshop.Status != "Available"}>{workshop.Name}</option>)
             }) : null}
           </select>
           <div className="ProfileButtonsAdmin">
