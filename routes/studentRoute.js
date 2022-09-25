@@ -5,6 +5,7 @@ const WorkShopModel = mongoose.model("WorkShops");
 const axios = require("axios");
 const express = require("express");
 const cors = require("cors");
+const User = require("../modles/User");
 const app = express();
 app.use(cors());
 require('./usersRoute')(app)
@@ -112,13 +113,14 @@ module.exports = (app) => {
                     //else unique 
                     //1.add user
                     let newUser;
-                    await axios.post("http://localhost:5000/AddUser", { User_Name, Password, Type: "Student" }).then((res) => {
-                        if (res.data.status != 200) {
-                            return response.send({ status: 402, Message: res.data.Message })
+                    // await axios.post("http://localhost:5000/AddUser", { User_Name, Password, Type: "Student" }).then((res) => {
+                        let res = addUserFunction(User.User_Name,User.Password,User.Type);   
+                        if ((await res).status != 200) {
+                            return response.send(res)
                         }
 
                         newUser = res.data.newUser;
-                    })
+                    // })
 
                     //2.Add Student
                     const newStudent = new StudentModel({

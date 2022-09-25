@@ -108,9 +108,12 @@ module.exports = (app) => {
                 return response.send({ status: 404, Message: "No Instructor with this ID" })
             }
 
-            await axios.put("http://localhost:5000/UpdateUser", { User }).then(async (res) => {
-                if (res.data.status == 200)//Done User Name Updated
-                {
+            // await axios.put("http://localhost:5000/UpdateUser", { User }).then(async (res) => {
+                let res = UpdateUserFunction(User);
+                if ((await res).status != 200) {
+                    return response.send(res)
+                }
+                else{
                     const updatedUserCollection = res.data.updatedUserCollection
                     if (Instructor.Name) {
                         const NameInstructorCollection = await InstrctorModel.find({ Name: Instructor.Name })
@@ -136,11 +139,7 @@ module.exports = (app) => {
                         return response.send({ status: 200, Message: "Instructor Updated Sucessfully" })
                     }
                 }
-                else {
-                    //problem display it
-                    return response.send({ status: res.data.status, Message: res.data.Message })
-                }
-            });
+            // });
         }
         catch (error) {
             return response.send({ status: -1, Message:error })
