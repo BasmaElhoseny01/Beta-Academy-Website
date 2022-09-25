@@ -9,12 +9,15 @@ const StudentModel = mongoose.model("Students")
 module.exports = (app) => {
     //A.Add instructor
     /*Input [Name, Mobile, Email, Study, Salary, User_Name] 
-    Response:1.(on success)status:200  InstructorObj UserObj
-             2. status: 402, Message: "Username Already Exists"  or Message: "Instructor Name Already Exists" or Message: "Error Happend in Last Step"
-             3. 402 Message"Username Already Exists ", Userobj [From Add user]
-             4. (on sysytem error) status:-1 Message:err [From Add user]
-             5.(on System error)status:-1  err
-             6. status: 200, Message: "Instructor Added Sucessfully" 
+    Response: 1. (on fail)status: 402, Message: "Username Already Exists" 
+              2. (on fail)status: 402, Message: "Instructor Name Already Exists" 
+              3. (on fail)status: 402, Message: "Error Happend in Last Step" 
+
+              4. (on fail)status 402 Message"Username Already Exists ", Userobj [From Add user]
+              5. (on fail)status:-1 Message:error [From Add user]
+
+             6.(on System error)status:-1  Message:error
+             7.(on sucess) { status: 200, Message: "Instructor Added Sucessfully" }
     */
     app.post("/AddInstructor", async (request, response) => {
         try {
@@ -33,7 +36,7 @@ module.exports = (app) => {
             //else unique 
             await axios.post("http://localhost:5000/AddUser", { User_Name, Password: "0000", Type: "Instructor" }).then(async (APIresponse) => {
                 if (APIresponse.data.status != 200) {
-                    return response.send(APIresponse.data.Message)
+                    return response.send(APIresponse.data)
                 }
                 const newUser = APIresponse.data.newUser;
 
@@ -168,7 +171,7 @@ module.exports = (app) => {
      * response: -(on fail):{status:404,Message:"No Instructor with this ID"}
      *           -(on fail):{ status: 404, Message: "No user with this ID" }
      *           -(on success):{status:200,Message:"Instructor Deleted Sucessfully"}
-     *           -(on sys fail):status: -1, Message: err 
+     *           -(on sys fail):status: -1, Message: error 
       */
     app.post('/DeleteInstructor', async (request, response) => {
         try {

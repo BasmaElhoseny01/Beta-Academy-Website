@@ -1,19 +1,17 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import AboutBar from './Common/Components/AboutBar';
-
 import Home from './Common/Components/Home';
 
 import Login from './Login_and_Register/Components/Login';
 import Signup from './Login_and_Register/Components/Signup';
 import AllCourses from './Common/Components/AllCourses';
-import About from './Common/Components/About';
 
 import Instructor from './Instructors/Components/Instructor';
 import Admin from './Admins/Components/Admin';
 import Student from './Students/Components/Student';
 import Footer from './Common/Components/Footer';
+
 function App() {
   return (
     <div className="App">

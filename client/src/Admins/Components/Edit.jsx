@@ -18,11 +18,10 @@ function Edit({ User }) {
         // 👇️ prevent page refresh
         event.preventDefault();
 
-        axios.put("http://localhost:5000/UpdateUser", { User: NewUser }).then((response) => {
-
+        axios.put("/UpdateUser", { User: NewUser }).then((response) => {
             alert(response.data.Message)
             window.location.href = './';
-        })
+        }).catch((error)=>alert(error))
     };
 
     return (

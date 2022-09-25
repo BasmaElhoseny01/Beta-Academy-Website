@@ -6,7 +6,7 @@ const UserModel = mongoose.model("Users")
 module.exports = (app) => {
     //A.Retrieve all admins
     /*Input:None
-    response:(on fail) {status:-1,Message:err}
+    response:(on fail) {status:-1,Message:error}
              (on sucess) {status:200, AdminsObj}
      */
 

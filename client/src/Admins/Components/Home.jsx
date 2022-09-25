@@ -40,13 +40,13 @@ function Home({ User }) {
     useEffect(() => {
         setNewWorkShop({ Name: "", Field: "", StartDate: "", Duration: "", SessionsPerWeek: "", SessionTime: "", Instructor_ID: "", Location: "", Price: "", MaxCapacity: "", Status: "" })
         //getting all instructors
-        axios.get(`http://localhost:5000/FindInstructors`).then((response) => {
+        axios.get(`/FindInstructors`).then((response) => {
             if (response.data.status == -1) {
                 alert(response.data.Message)
                 return
             }
             setInstructors(response.data)
-        })
+        }).catch((error) => alert(error))
 
         setNewInstructor({ Name: "", Mobile: "", Email: "", Study: "", Salary: "" })
         setNewUserInst({ User_Name: "" })
@@ -54,32 +54,32 @@ function Home({ User }) {
         SetNewUserAdmin({ User_Name: "" })
 
         //getting all WorkShops
-        axios.get('http://localhost:5000/FindWorkShops').then((response) => {
+        axios.get('/FindWorkShops').then((response) => {
             if (response.data.status == -1) {
                 alert(response.data.Message)
             }
             else
                 setWorkShops(response.data)
-        })
+        }).catch((error) => alert(error))
 
         //getting all Students
-        axios.get('http://localhost:5000/FindStudents').then((response) => {
+        axios.get('/FindStudents').then((response) => {
             if (response.data.status == -1) {
                 alert(response.data.Message)
             }
             else
                 setStudents(response.data)
-        })
+        }).catch((error) => alert(error))
 
 
         //getting all admins
-        axios.get('http://localhost:5000/allAdmins').then((response) => {
+        axios.get('/allAdmins').then((response) => {
             if (response.data.status == 200) {
                 setAdmins(response.data.AdminsObj)
             }
             else
                 alert(response.data.Message)
-        })
+        }).catch((error) => alert(error))
     }, [])
 
     const AddWorkShop = (event) => {
@@ -89,7 +89,7 @@ function Home({ User }) {
             alert("Please Fill All fields")
             return
         }
-        axios.post("http://localhost:5000/AddWorkShop", {
+        axios.post("/AddWorkShop", {
             Name: NewWorkShop.Name, Field: NewWorkShop.Field,
             StartDate: NewWorkShop.StartDate, Duration: NewWorkShop.Duration, SessionsPerWeek: NewWorkShop.SessionsPerWeek, SessionTime: NewWorkShop.SessionTime, Instructor_ID: NewWorkShop.Instructor_ID, Location: NewWorkShop.Location, Price: NewWorkShop.Price, MaxCapacity: NewWorkShop.MaxCapacity, Status: NewWorkShop.Status
         }).then((response) => {
@@ -100,7 +100,7 @@ function Home({ User }) {
             //error
             alert(response.data.Message)
 
-        })
+        }).catch((error) => alert(error))
     }
 
 
@@ -110,7 +110,7 @@ function Home({ User }) {
             alert("Please Fill All fields")
             return
         }
-        axios.post("http://localhost:5000/AddInstructor", { Name: NewInstructor.Name, Mobile: NewInstructor.Mobile, Email: NewInstructor.Email, Study: NewInstructor.Study, Salary: NewInstructor.Salary, User_Name: NewUserInst.User_Name }).then((response) => {
+        axios.post("/AddInstructor", { Name: NewInstructor.Name, Mobile: NewInstructor.Mobile, Email: NewInstructor.Email, Study: NewInstructor.Study, Salary: NewInstructor.Salary, User_Name: NewUserInst.User_Name }).then((response) => {
             if (response.data.status === 200) {
                 alert(response.data.Message)
                 return;
@@ -118,7 +118,7 @@ function Home({ User }) {
             //error
             alert(response.data.Message)
 
-        })
+        }).catch((error) => alert(error))
     }
 
     const AddAdmin = (event) => {
@@ -126,7 +126,7 @@ function Home({ User }) {
             alert("Please Fill All fields")
             return
         }
-        axios.post("http://localhost:5000/AddUser", { User_Name: NewUserAdmin.User_Name, Password: "0000", Type: "Admin" }).then((response) => {
+        axios.post("/AddUser", { User_Name: NewUserAdmin.User_Name, Password: "0000", Type: "Admin" }).then((response) => {
             if (response.data.status === 200) {
                 alert(response.data.Message)
                 return;
@@ -135,7 +135,7 @@ function Home({ User }) {
                 alert(response.data.Message)
             }
 
-        })
+        }).catch((error) => alert(error))
 
     }
 
@@ -143,12 +143,9 @@ function Home({ User }) {
     const EditWorkShop = (event) => {
         // // 👇️ prevent page refresh
         // event.preventDefault();
-
-
-        axios.put("http://localhost:5000/UpdateWorkShop", { WorkShop: NewEditedWorkShop }).then((response) => {
-            console.log(response)
+        axios.put("/UpdateWorkShop", { WorkShop: NewEditedWorkShop }).then((response) => {
             alert(response.data.Message)
-        })
+        }).catch((error) => alert(error))
     }
 
     const UnEnroll = (event) => {
@@ -157,11 +154,9 @@ function Home({ User }) {
             return
         }
 
-        axios.put(`http://localhost:5000/UnEnroll`, { Student_ID: Student_unenrolled, WorkShop_ID: WorkShop_unenrolled }).then((response) => {
-            if (response.data.status != 200)
-                alert(response.data.Message)
-            else alert(response.data.Message)
-        })
+        axios.put(`/UnEnroll`, { Student_ID: Student_unenrolled, WorkShop_ID: WorkShop_unenrolled }).then((response) => {
+            alert(response.data.Message)
+        }).catch((error) => alert(error))
     }
 
     const DeleteWorkShop = (event) => {
@@ -170,9 +165,9 @@ function Home({ User }) {
             return
         }
         else {
-            axios.post(`http://localhost:5000/DeleteWorkShop`, { ID: WorkShopDeleted }).then((response) => {
+            axios.post(`/DeleteWorkShop`, { ID: WorkShopDeleted }).then((response) => {
                 alert(response.data.Message)
-            })
+            }).catch((error) => alert(error))
         }
     }
 
@@ -182,10 +177,9 @@ function Home({ User }) {
             return
         }
         else {
-            axios.post(`http://localhost:5000/DeleteInstructor`, { ID: InstructorDeleted }).then((response) => {
-                console.log(response.data.Message)
+            axios.post(`/DeleteInstructor`, { ID: InstructorDeleted }).then((response) => {
                 alert(response.data.Message)
-            })
+            }).catch((error) => alert(error))
         }
     }
 
@@ -195,10 +189,9 @@ function Home({ User }) {
             return
         }
         else {
-            axios.post(`http://localhost:5000/DeleteUser`, { ID: AdminDeleted }).then((response) => {
-                console.log(response.data.Message)
+            axios.post(`/DeleteUser`, { ID: AdminDeleted }).then((response) => {
                 alert(response.data.Message)
-            })
+            }).catch((error) => alert(error))
         }
 
     }
