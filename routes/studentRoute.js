@@ -91,30 +91,30 @@ module.exports = (app) => {
 
     })
 
-    //C.Check if Student is enrolled in Certain WorkShop  [NOYUSED]
-    app.get(`/IsStudentEnrolled/:SID/:WID`, async (request, response) => {
-        try {
-            const SID = request.params.SID;
-            const WID = request.params.WID;
-            const StudentObj = await StudentModel.find({ _id: SID })
-            if (StudentObj) {
-                const WorkShops = StudentObj[0].WorkShops
-                if (Object.values(WorkShops).indexOf(WID) > -1) {
-                    //found
-                    response.send({ stauts: 200, Message: true })
-                }
-                else
-                    response.send({ stauts: 200, Message: false })
+    // //C.Check if Student is enrolled in Certain WorkShop  [NOYUSED]
+    // app.get(`/IsStudentEnrolled/:SID/:WID`, async (request, response) => {
+    //     try {
+    //         const SID = request.params.SID;
+    //         const WID = request.params.WID;
+    //         const StudentObj = await StudentModel.find({ _id: SID })
+    //         if (StudentObj) {
+    //             const WorkShops = StudentObj[0].WorkShops
+    //             if (Object.values(WorkShops).indexOf(WID) > -1) {
+    //                 //found
+    //                 response.send({ stauts: 200, Message: true })
+    //             }
+    //             else
+    //                 response.send({ stauts: 200, Message: false })
 
-            }
-            else //not found
-                response.send({ status: 404 })
-        } catch (error) {
-            return response.send({ status: -1, error })
-        }
+    //         }
+    //         else //not found
+    //             response.send({ status: 404 })
+    //     } catch (error) {
+    //         return response.send({ status: -1, error })
+    //     }
 
 
-    })
+    // })
 
     //D.Retrieve Students Whose Student is ID
     /*Input:Student ID
@@ -139,35 +139,6 @@ module.exports = (app) => {
             return response.send({ status: -1, error })
         }
     })
-
-    //E.Retrieve students Enrolled in Certain WorkShop [NotUsed]
-    app.get(`/FindWorkShopStudents/:ID`, async (request, response) => {
-        try {
-            const ID = request.params.ID;
-            const WorkShopObj = await WorkShopModel.find({ _id: ID });
-            if (WorkShopObj.length >= 0)
-                response.send({ stauts: 200, EnrolledStudents: WorkShopObj[0].EnrolledStudents })
-            else //not found
-                response.send({ status: 404 })
-
-        } catch (error) {
-            return response.send({ status: -1, error })
-        }
-
-    })
-
-    // app.get("/FindAllStudentInWorkshop/:ws", async (request, response) => {
-    //   const  WorkShops= request.params.ws;
-
-    //     StudentModel.find({ WorkShops.map((x)=>{ return   })}, (err, StudentObj) => {
-    //         if (err)
-    //             response.send({ status: -1, err })
-    //         else if (WorkShopObj)
-    //             response.send({ staus: 200, StudentObj })
-    //         else //not found
-    //             response.send({ status: 404 })
-    //     })
-    // })
 
     //F.Enroll
     /*
@@ -239,7 +210,7 @@ module.exports = (app) => {
             return response.send({ status: -1, Message: error })
         }
     })
-    
+
     app.put(`/UpdateStudent`, async (request, response) => {
         const { Student, User } = request.body
         try {
