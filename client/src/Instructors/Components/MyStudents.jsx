@@ -12,7 +12,6 @@ function MyStudents({ Instructor }) {
     const [Students, SetStudents] = useState([])
 
     useEffect(() => {
-        // console.log(Instructor._id)
         if (Instructor._id) {
 
             axios.get(`/MyStudents/${Instructor._id}`).then((response) => {

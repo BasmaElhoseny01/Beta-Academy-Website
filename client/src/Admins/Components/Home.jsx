@@ -83,6 +83,9 @@ function Home({ User }) {
     }, [])
 
     const AddWorkShop = (event) => {
+        // 👇️ prevent page refresh
+        event.preventDefault();
+
         if (NewWorkShop.Name === "" || NewWorkShop.Field === "" || NewWorkShop.StartDate === "" || NewWorkShop.Duration === "" ||
             NewWorkShop.SessionsPerWeek === "" || NewWorkShop.SessionTime === "" || NewWorkShop.Instructor_ID === "" || NewWorkShop.Location === "" || NewWorkShop.Price === "" || NewWorkShop.MaxCapacity === ""
             || NewWorkShop.Status === "") {
@@ -93,8 +96,13 @@ function Home({ User }) {
             Name: NewWorkShop.Name, Field: NewWorkShop.Field,
             StartDate: NewWorkShop.StartDate, Duration: NewWorkShop.Duration, SessionsPerWeek: NewWorkShop.SessionsPerWeek, SessionTime: NewWorkShop.SessionTime, Instructor_ID: NewWorkShop.Instructor_ID, Location: NewWorkShop.Location, Price: NewWorkShop.Price, MaxCapacity: NewWorkShop.MaxCapacity, Status: NewWorkShop.Status
         }).then((response) => {
-            if (response.data.status === 200) {
+            console.log(response)
+            console.log(typeof (response.data.status))
+            console.log(typeof (200))
+
+            if (response.data.status == 200) {
                 alert(response.data.Message)
+                window.location.reload();
                 return;
             }
             //error
@@ -105,6 +113,8 @@ function Home({ User }) {
 
 
     const AddInstructor = (event) => {
+        // 👇️ prevent page refresh
+        event.preventDefault();
 
         if (NewInstructor.Name === "" || NewInstructor.Mobile === "" || NewInstructor.Email === "" || NewInstructor.Study === "" || NewInstructor.Salary === "" || NewUserInst.User_Name === "") {
             alert("Please Fill All fields")
@@ -113,6 +123,7 @@ function Home({ User }) {
         axios.post("/AddInstructor", { Name: NewInstructor.Name, Mobile: NewInstructor.Mobile, Email: NewInstructor.Email, Study: NewInstructor.Study, Salary: NewInstructor.Salary, User_Name: NewUserInst.User_Name }).then((response) => {
             if (response.data.status === 200) {
                 alert(response.data.Message)
+                window.location.reload();
                 return;
             }
             //error
@@ -122,6 +133,9 @@ function Home({ User }) {
     }
 
     const AddAdmin = (event) => {
+        // 👇️ prevent page refresh
+        event.preventDefault();
+
         if (NewUserAdmin.User_Name === "") {
             alert("Please Fill All fields")
             return
@@ -129,6 +143,7 @@ function Home({ User }) {
         axios.post("/AddUser", { User_Name: NewUserAdmin.User_Name, Password: "0000", Type: "Admin" }).then((response) => {
             if (response.data.status === 200) {
                 alert(response.data.Message)
+                window.location.reload();
                 return;
             }
             else {
@@ -141,14 +156,17 @@ function Home({ User }) {
 
 
     const EditWorkShop = (event) => {
-        // // 👇️ prevent page refresh
-        // event.preventDefault();
+        // 👇️ prevent page refresh
+        event.preventDefault();
         axios.put("/UpdateWorkShop", { WorkShop: NewEditedWorkShop }).then((response) => {
             alert(response.data.Message)
+            window.location.reload();
         }).catch((error) => alert(error))
     }
 
     const UnEnroll = (event) => {
+        // 👇️ prevent page refresh
+        event.preventDefault();
         if (Student_unenrolled == "default" || WorkShop_unenrolled == "default") {
             alert("Please Fill All fields")
             return
@@ -156,10 +174,13 @@ function Home({ User }) {
 
         axios.put(`/UnEnroll`, { Student_ID: Student_unenrolled, WorkShop_ID: WorkShop_unenrolled }).then((response) => {
             alert(response.data.Message)
+            window.location.reload();
         }).catch((error) => alert(error))
     }
 
     const DeleteWorkShop = (event) => {
+        // 👇️ prevent page refresh
+        event.preventDefault();
         if (WorkShopDeleted === "") {
             alert("Please Fill All fields")
             return
@@ -167,11 +188,14 @@ function Home({ User }) {
         else {
             axios.post(`/DeleteWorkShop`, { ID: WorkShopDeleted }).then((response) => {
                 alert(response.data.Message)
+                window.location.reload();
             }).catch((error) => alert(error))
         }
     }
 
     const DeleteInstructor = (event) => {
+        // 👇️ prevent page refresh
+        event.preventDefault();
         if (InstructorDeleted === "") {
             alert("Please Fill All fields")
             return
@@ -179,11 +203,14 @@ function Home({ User }) {
         else {
             axios.post(`/DeleteInstructor`, { ID: InstructorDeleted }).then((response) => {
                 alert(response.data.Message)
+                window.location.reload();
             }).catch((error) => alert(error))
         }
     }
 
     const DeleteAdmin = (event) => {
+        // 👇️ prevent page refresh
+        event.preventDefault();
         if (AdminDeleted === "") {
             alert("Please Fill All fields")
             return
@@ -191,6 +218,7 @@ function Home({ User }) {
         else {
             axios.post(`/DeleteUser`, { ID: AdminDeleted }).then((response) => {
                 alert(response.data.Message)
+                window.location.reload();
             }).catch((error) => alert(error))
         }
 
