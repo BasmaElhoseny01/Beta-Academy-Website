@@ -11,8 +11,6 @@ app.use(cors());
 require('./usersRoute')(app)
 const addUserFunction = async (User_Name, Password, Type) => {
     try {
-        // let { User_Name, Password, Type } = request.body;
-        //check if user_Name alreadyExists
 
         const UserObj = await UserModel.find({ User_Name });
 
@@ -30,12 +28,10 @@ const addUserFunction = async (User_Name, Password, Type) => {
             Type: Type
         })
         await newUser.save()
-        return "1010"
 
         newUser.User_ID = newUser._id
         await newUser.save()
-
-        // return ({ status: 200, Message: "User Added sucessfully", newUser })
+        return ({ status: 200, Message: "User Added sucessfully", newUser })
     }
     catch (error) {
         return ({ status: -1, Message: error })
@@ -96,62 +92,63 @@ const UpdateUserFunction = async (User) => {
 module.exports = (app) => {
 
     //A.Add Student
-    app.post("/AddStudent", async (request, response) => {
-        try {
+   //A.Add Student
+   app.post("/AddStudent", async (request, response) => {
+    try {
 
-            let { Name, Mobile, Email, University, Faculty, Department, Academic_Year, User_Name, Password } = request.body;
-            const UserObj = await UserModel.find({ User_Name });
-            if (UserObj.length > 0)
-                return response.send({ status: 402, Message: "Username Already Exists" })
+        let { Name, Mobile, Email, University, Faculty, Department, Academic_Year, User_Name, Password } = request.body;
+        const UserObj = await UserModel.find({ User_Name });
+        if (UserObj.length > 0)
+            return response.send({ status: 402, Message: "Username Already Exists" })
 
+        else {
+            //Check if the Name of the Student already exists
+            const Studentobj = await StudentModel.find({ Name });
+            if (Studentobj.length > 0)
+                return response.send({ status: 402, Message: "Student Name Already Exists" })
             else {
-                //Check if the Name of the Student already exists
-                const Studentobj = await StudentModel.find({ Name });
-                if (Studentobj.length > 0)
-                    return response.send({ status: 402, Message: "Student Name Already Exists" })
-                else {
-                    //else unique 
-                    //1.add user
-                    let newUser;
-                    // await axios.post("http://localhost:5000/AddUser", { User_Name, Password, Type: "Student" }).then((res) => {
-                        let res = addUserFunction(User.User_Name,User.Password,User.Type);   
-                        if ((await res).status != 200) {
-                            return response.send(res)
-                        }
-
-                        newUser = res.data.newUser;
-                    // })
-
-                    //2.Add Student
-                    const newStudent = new StudentModel({
-                        Name,
-                        Mobile,
-                        Email,
-                        University,
-                        Faculty,
-                        Department,
-                        Academic_Year,
-                        User_Name,
-                        Password,
-                        User_ID: newUser._id
-                    })
-
-                    const NewStudentobj = await newStudent.save();
-
-                    //3.Update User with the new aaded row id
-                    const updateduserCollection = await UserModel.updateOne({ _id: newUser._id }, { $set: { User_ID: NewStudentobj._id } });
-                    if (updateduserCollection.modifiedCount > 0) {
-                        return response.send({ status: 200, Message: "Student Added Sucessfully", Student: NewStudentobj._id })
+                //else unique 
+                //1.add user
+                let newUser;
+                // await axios.post("http://localhost:5000/AddUser", { User_Name, Password, Type: "Student" }).then((res) => {
+                    let res = addUserFunction( User_Name, Password,"Student");
+                    if ((await res).status != 200) {
+                        return response.send(res)
                     }
-                    return response.send({ status: 402, Message: "Error Happend in Last Step" })
+                    else{
+                    newUser = res.newUser;
+                    }
+                // })
+
+                //2.Add Student
+                const newStudent = new StudentModel({
+                    Name,
+                    Mobile,
+                    Email,
+                    University,
+                    Faculty,
+                    Department,
+                    Academic_Year,
+                    User_Name,
+                    Password,
+                    User_ID: newUser._id
+                })
+
+                const NewStudentobj = await newStudent.save();
+
+                //3.Update User with the new aaded row id
+                const updateduserCollection = await UserModel.updateOne({ _id: newUser._id }, { $set: { User_ID: NewStudentobj._id } });
+                if (updateduserCollection.modifiedCount > 0) {
+                    return response.send({ status: 200, Message: "Student Added Sucessfully", Student: NewStudentobj._id })
                 }
+                return response.send({ status: 402, Message: "Error Happend in Last Step" })
             }
-
-        } catch (error) {
-            return response.send({ status: -1, Message: error })
         }
-    })
 
+    } catch (error) {
+        return response.send({ status: -1, Message: error })
+    }
+})
     //B.Find Student by ID
     app.get(`/FindStudentByID/:ID`, async (request, response) => {
         const ID = request.params.ID;
