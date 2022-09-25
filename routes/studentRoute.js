@@ -214,16 +214,15 @@ module.exports = (app) => {
     app.put(`/UpdateStudent`, async (request, response) => {
         try {
             const { Student, User } = request.body
-
             const Student_Collection = await StudentModel.find({ _id: Student._id })
             if (Student_Collection.length <= 0) {
                 return response.send({ status: 404, Message: "No Student with this ID" })
             }
+    
             await axios.put("http://localhost:5000/UpdateUser", { User }).then(async (res) => {
                 if (res.data.status != 200) {
-                    return response.send({ status: 402, Mesaage: res.data.Message })
+                    return response.send(res.data)
                 }
-
                 else {
                     if (Student.Name) {
                         const NameStudentCollection = await StudentModel.find({ Name: Student.Name })
@@ -251,7 +250,7 @@ module.exports = (app) => {
                 }
             })
         } catch (error) {
-            return response.send(error)
+            return response.send({status:-1,Message:error})
         }
     })
 

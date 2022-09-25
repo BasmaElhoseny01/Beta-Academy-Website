@@ -74,7 +74,6 @@ module.exports = (app) => {
         try {
             const { User } = request.body
             const user_NameCollection = await UserModel.find({ _id: User._id })
-
             if (user_NameCollection.length > 0) {
                 //is User_Name Updated
                 if (User.User_Name) {
@@ -83,8 +82,10 @@ module.exports = (app) => {
                         //checkif not used by any one else
                         if (user_NameCollection[0]._id == User._id)//he repeatedsame user name =>no problem
                         {
-                            const salt = await bcrypt.genSalt(10)
-                            User.Password = await bcrypt.hash(User.Password, salt);
+                            if (User.Password) {
+                                const salt = await bcrypt.genSalt(10)
+                                User.Password = await bcrypt.hash(User.Password, salt);
+                            }
                             const updatedUserCollection = await UserModel.findByIdAndUpdate({ _id: User._id }, { $set: User })
                             return response.send({ status: 200, Message: "User Updated Sucessfully", updatedUserCollection })
                         }
@@ -95,16 +96,20 @@ module.exports = (app) => {
                     }
                     else {
                         //new user name==> add directly
-                        const salt = await bcrypt.genSalt(10)
-                        User.Password = await bcrypt.hash(User.Password, salt);
+                        if (User.Password) {
+                            const salt = await bcrypt.genSalt(10)
+                            User.Password = await bcrypt.hash(User.Password, salt);
+                        }
                         const updatedUserCollection = await UserModel.findByIdAndUpdate({ _id: User._id }, { $set: User })
                         return response.send({ status: 200, Message: "User Updated Sucessfully", updatedUserCollection })
                     }
                 }
                 else {
                     //no change in user Name ==>update direclty
-                    const salt = await bcrypt.genSalt(10)
-                    User.Password = await bcrypt.hash(User.Password, salt);
+                    if (User.Password) {
+                        const salt = await bcrypt.genSalt(10)
+                        User.Password = await bcrypt.hash(User.Password, salt);
+                    }
                     const updatedUserCollection = await UserModel.findByIdAndUpdate({ _id: User._id }, { $set: User })
                     return response.send({ status: 200, Message: "User Updated Sucessfully", updatedUserCollection })
                 }
