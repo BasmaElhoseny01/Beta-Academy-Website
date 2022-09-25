@@ -12,7 +12,6 @@ function StudentCard({ Student }) {
   useEffect(() => {
     if (Student) {
       setStudent(Student)
-      // console.log(Student.WorkShops)
     }
   },[])
   

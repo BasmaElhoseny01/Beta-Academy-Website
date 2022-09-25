@@ -108,7 +108,7 @@ module.exports = (app) => {
 
     //D.Find user by ID
     /*Input:Id of User
-    response:(on fail):status:-1 Message:err
+    response:(on fail):status:-1 Message:error
              (on Sucess): status:200 UserObj 
              (ID not found) status:404 Message:"User Not Found"
     */
@@ -128,7 +128,7 @@ module.exports = (app) => {
     //E. Delete User
     /**input Id of user
      * response: -(on fail):{status:404,Message:"No user Found with this iD"}
-     *           -(on sucess):{status:200,Message:"User Deleted Sucessfully"}
+     *           -(on success):{status:200,Message:"User Deleted Sucessfully"}
      *           -(on sys fail):{status: -1, Message: error }
     */
     app.post('/DeleteUser', async (request, response) => {

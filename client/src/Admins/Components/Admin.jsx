@@ -18,24 +18,22 @@ function Admin() {
 
     useEffect(() => {
         //calling API to get Admin Object
-        axios.get(`http://localhost:5000/FindUserByID/${ID}`).then((response) => {
-            if (response.data.status === 200) {
+        axios.get(`/FindUserByID/${ID}`).then((response) => {
+            if (response.data.status != 200)
+                alert(response.data.Message);
+            else
                 setUser(response.data.UserObj[0])
-                return;
-            }
-            else {
-                alert(response.data.Message)
-            }
-        })
+
+        }).catch((error) => alert(error))
     }, [])
 
 
 
     return (
         <div>
-            <NavBar/>
+            <NavBar />
             <Routes>
-                <Route path='/' element={<Home User={User}/>}></Route>
+                <Route path='/' element={<Home User={User} />}></Route>
                 <Route path='/AllInstructors' element={<AllInstructors />}></Route>
                 <Route path='/AllStudents' element={<AllStudents />}></Route>
                 <Route path='/AllCourses' element={<AllCourses flag={true} />}></Route>

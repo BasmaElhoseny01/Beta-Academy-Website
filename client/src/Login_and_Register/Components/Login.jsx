@@ -17,7 +17,9 @@ function Login() {
   const [Remember, setRemember] = useState(false)
   const [Pending, setPending] = useState(false)
 
-  const Login = () => {
+  const Login = event => {
+      // 👇️ prevent page refresh
+      event.preventDefault();
     if (UserName === "" || password === "") {
       alert("Please fill all fields")
       return

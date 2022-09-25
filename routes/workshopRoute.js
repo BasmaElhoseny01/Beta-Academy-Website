@@ -60,17 +60,16 @@ module.exports = (app) => {
         -Duration
         -SessionsPerWeek
         -SessionTime
-        -Student_ID
+        -**Instructor_ID -1 if no instructor or ID
         -Location
         -Price
         -MaxCapacity
         -Status
-        -**Instructor_ID -1 if no instructor or ID
     
-    Response:1.(on success)status:200 Message "WorkShop Added Sucessfully"  newWorkShop
+    Response:1.(on success)status:200 Message "WorkShop Added Sucessfully"  newWorkShop}
              2.(on success){ status: 200, Message: "This Instructor already has this work shop" }
              2.(on fail)status:402 Message"WorkShop Name Already Exists" or "No Insrtuctor with this id" 
-             3. (on sysytem error) status:-1 Message:err
+             3. (on sysytem error) status:-1 Message:error
     */
     app.post("/AddWorkShop", async (request, response) => {
         try {
@@ -112,7 +111,7 @@ module.exports = (app) => {
     /**input Id of Workshop
      * response: -(on fail):{status:404,Message:"No WorkShop with this ID"}
      *           -(on sucess):{status:200,Message:"WorkShop Deleted Sucessfully"}
-     *           -(on sys fail):status: -1, Message: err 
+     *           -(on sys fail):status: -1, Message: error 
      */
     app.post('/DeleteWorkShop', async (request, response) => {
         try {
@@ -152,7 +151,7 @@ module.exports = (app) => {
 
     //E.UnAssignWorkShop
     /**input:WorkShopID,NewInstructorID[-1 or ID]
-     * Response:-(on sys err):status: -1, Message: err
+     * Response:-(on sys err):status: -1, Message: error
                 -(on fail):{ status: 404, Message: "No WorkShop with this ID" }"
                 -(on fail):{ status: 404, Message: "No Old Instructor with this ID" }
                 -(on success:{ status: 200, Message: "This Instructor already has this work shop" })

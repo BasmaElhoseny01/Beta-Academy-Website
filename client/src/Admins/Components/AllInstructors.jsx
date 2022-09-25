@@ -8,14 +8,13 @@ function AllInstructors() {
     const [Instructors, setInstructors] = useState([])
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/FindInstructors`).then((response) => {
+        axios.get(`/FindInstructors`).then((response) => {
             if (response.data.status == -1) {
                 alert(response.data.Message)
-                return
+                return;
             }
             setInstructors(response.data)
-            console.log(response.data)
-        })
+        }).catch((error)=>alert(error))
 
     }, [])
 

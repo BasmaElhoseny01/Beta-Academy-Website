@@ -12,7 +12,6 @@ function InstructorCard({ instructor }) {
   useEffect(() => {
     if (instructor) {
       setInstructor(instructor)
-      console.log(instructor.WorkShops)
     }
   },[])
   
@@ -57,37 +56,8 @@ function InstructorCard({ instructor }) {
 
         </table>
         : <h1>loading.....</h1>}
-
-
     </div>
   )
 }
 
 export default InstructorCard
-
-
-// <div className="WorkShopsTable">
-// <table>
-// <tbody>
-//   <tr>
-//     <th>WorkShop</th>
-{/* <th>Field</th>
-    <th></th> */}
-{/* </tr>
-  </tbody>
-  {Instructor.WorkShops?Instructor.WorkShops.map((workshop) => {
-    //get WorkShop by id
-
-    return (
-      <tbody key={workshop}>
-      <tr> */}
-{/* <td>{workshop}</td> */ }
-{/* <td>{val.age}</td>
-        <td>{val.gender}</td> */}
-{/* </tr>
-      </tbody>
-    )
-  }):null
-}
-</table>
-</div> */}

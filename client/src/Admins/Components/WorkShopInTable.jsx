@@ -8,8 +8,8 @@ function WorkShopInTable({ WorkShopID, InstructorName }) {
     const [Status, setStatus] = useState("")
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/FindWorkShopByID/${WorkShopID}`).then((response) => {
-            if (response.data.status !== 200) {
+        axios.get(`/FindWorkShopByID/${WorkShopID}`).then((response) => {
+            if (response.data.status != 200) {
                 alert(response.data.Message)
                 return;
             }
@@ -23,7 +23,7 @@ function WorkShopInTable({ WorkShopID, InstructorName }) {
             else if (response.data.WorkShopObj[0].Status === "Full")
                 setStatus("🔴")
 
-        })
+        }).catch((error)=>alert(error))
     }, [])
 
 
