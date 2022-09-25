@@ -6,14 +6,14 @@ function AllStudents() {
   const [Students, setStudents] = useState([])
 
   useEffect(() => {
-      axios.get(`http://localhost:5000/FindStudents`).then((response) => {
+      axios.get(`/FindStudents`).then((response) => {
           if (response.data.status == -1) {
               alert(response.data.Message)
               return
           }
           setStudents(response.data)
           console.log(response.data)
-      })
+      }).catch((error) => alert(error))
 
   }, [])
 

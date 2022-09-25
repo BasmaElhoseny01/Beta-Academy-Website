@@ -182,27 +182,22 @@ module.exports = (app) => {
             const { Student_ID, WorkShop_ID } = request.body
             const Workshop = await WorkShopModel.find({ _id: WorkShop_ID });
             
-            if (Workshop.length <= 0) {
-                response.send({ status: 404, Message: "No WorkShop with this id" })
-                return
-            }
-            const Studentquery = await StudentModel.updateOne({ _id: Student_ID }, { $addToSet: { WorkShops: WorkShop_ID } })
-            if (Studentquery.matchedCount <= 0) {
-                response.send({ status: 404, Message: "No Student with this id" })
-                return
-            }
-            if (Studentquery.modifiedCount <= 0) {
-                response.send({ status: 200, Message: "This student is already enrolled in this Workshop" })
-                return;
-            }
+            if (Workshop.length < 0) 
+                return response.send({ status: 404, Message: "No WorkShop with this id" });
+
+            const Studentquery = await StudentModel.updateOne({ _id: Student_ID }, { $addToSet: { WorkShops: WorkShop_ID } });
+            if (Studentquery.matchedCount <= 0) 
+               return response.send({ status: 404, Message: "No Student with this id" });
+                
+            if (Studentquery.modifiedCount <= 0) 
+              return  response.send({ status: 200, Message: "This student is already enrolled in this Workshop" });
 
             //else done 
             //add Thus student to WorkShop
 
             const WorkShopquery = await WorkShopModel.updateOne({ _id: WorkShop_ID }, { $addToSet: { EnrolledStudents: Student_ID } })
-            if (WorkShopquery.modifiedCount > 0) {
-                response.send({ status: 200, Message: "Enrolled in WorkShop Sucessfully" })
-            }
+            if (WorkShopquery.modifiedCount > 0)
+               return response.send({ status: 200, Message: "Enrolled in WorkShop Sucessfully" });
         } catch (error) {
             return response.send(error)
         }
@@ -218,29 +213,26 @@ module.exports = (app) => {
         const { Student_ID, WorkShop_ID } = request.body
         try {
             const StudentQuery = await StudentModel.updateMany({ _id: Student_ID }, { $pull: { WorkShops: WorkShop_ID } })
-            if (StudentQuery.matchedCount <= 0) {
-                response.send({ status: 404, Message: "No Student with this id" })
-                return;
-            }
-            else if (StudentQuery.modifiedCount <= 0) {
-                response.send({ status: 200, Message: "This Student isn't Enrolled in this work shop" })
-                return
-            }
+            if (StudentQuery.matchedCount < 0)
+            return response.send({ status: 404, Message: "No Student with this id" });
+                
+            else if (StudentQuery.modifiedCount <= 0) 
+            return response.send({ status: 200, Message: "This Student isn't Enrolled in this work shop" });
+                
             else {
                 //done
                 //remove this Student from WorkShop
                 const WorkShopQuery = await WorkShopModel.updateMany({ _id: WorkShop_ID }, { $pull: { EnrolledStudents: Student_ID } })
-                if (WorkShopQuery.matchedCount <= 0) {
-                    response.send({ status: 404, Message: "No WorkShop with this id" })
-                    return;
-                }
-                else if (WorkShopQuery.modifiedCount <= 0) {
-                    response.send({ status: 200, Message: "This Student isn't Enrolled in this work shop" })
-                    return
-                }
+                if (WorkShopQuery.matchedCount < 0) 
+                return response.send({ status: 404, Message: "No WorkShop with this id" });
+                
+                
+                else if (WorkShopQuery.modifiedCount <= 0) 
+                return response.send({ status: 200, Message: "This Student isn't Enrolled in this work shop" });
+
                 else {
                     //done
-                    response.send({ status: 200, Message: "Student Unenrolled successfully" })
+                    return response.send({ status: 200, Message: "Student Unenrolled successfully" })
 
                 }
             }

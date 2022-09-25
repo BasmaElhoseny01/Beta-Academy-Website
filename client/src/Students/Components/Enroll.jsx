@@ -13,12 +13,22 @@ function Enroll({ Student }) {
   useEffect(() => {
     //getting all WorkShops
     axios.get(`/FindWorkShops`).then((response) => {
+      console.log("fghjklkjdskdn");
       if (response.data.status == -1) {
+        console.log('status in find Enroll');
         alert(response.data.Message)
+        return
       }
-      else
+      else {
+        console.log(' find Enroll');
         setWorkShops(response.data)
-    }).catch((error) => alert(error))
+        return;
+      }
+
+    }).catch((error) => {
+      console.log('error in find Enroll');
+      return alert(error)
+    })
   }, [])
 
 
@@ -35,18 +45,24 @@ function Enroll({ Student }) {
       axios.put(`/Enroll`, { Student_ID: Student._id, WorkShop_ID: WorkshopID }).then((response) => {
         // console.log(response.data) 
         if (response.data.status === -1) {
-          console.log("err")
+          console.log("err status in enroll")
           alert(response.data.err)
+
           return;
         }
         else if (response.data.status === 404) {
-          console.log("404")
+          console.log("404 status in enroll")
           alert(response.data.Message)
           return;
         }
+        console.log("Message in enroll")
         alert(response.data.Message)
         window.location.href = './';
-      }, []).catch((error) => alert(error))
+        return;
+      }, []).catch((error) => {
+        console.log('error in Enroll');
+        return alert(error)
+      })
     }
   }
   return (
@@ -76,7 +92,7 @@ function Enroll({ Student }) {
         </div>
       </form>
 
-      <UnEnroll Student={Student}/>
+      <UnEnroll Student={Student} />
 
     </div>
   )
