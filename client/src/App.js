@@ -15,6 +15,7 @@ import Footer from './Common/Components/Footer';
 
 function App() {
   useEffect(() => {
+    ///
     document.title = "Beta Academy"
   }, [])
   
