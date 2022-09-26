@@ -5,6 +5,7 @@ const InstrctorModel = mongoose.model("Instructors")
 const WorkShopModel = mongoose.model("WorkShops")
 const StudentModel = mongoose.model("Students")
 
+const lib = require('./functions')
 
 module.exports = (app) => {
 
@@ -149,56 +150,56 @@ module.exports = (app) => {
         }
     });
 
-    //E.UnAssignWorkShop
-    /**input:WorkShopID,NewInstructorID[-1 or ID]
-     * Response:-(on sys err):status: -1, Message: error
-                -(on fail):{ status: 404, Message: "No WorkShop with this ID" }"
-                -(on fail):{ status: 404, Message: "No Old Instructor with this ID" }
-                -(on success:{ status: 200, Message: "This Instructor already has this work shop" })
-                -(on success):{ status: 200, Message: "This WorkShop already has this Instructor" }
-                -(on success):{ status: 200, Message: "WorkShop Instructor Updated sucessfully" }
-                */
-    app.put('/UnAssignWorkShop', async (request, response) => {
-        try {
-            let { WorkShopID, InstructorID } = request.body
+    // //E.UnAssignWorkShop
+    // /**input:WorkShopID,NewInstructorID[-1 or ID]
+    //  * Response:-(on sys err):status: -1, Message: error
+    //             -(on fail):{ status: 404, Message: "No WorkShop with this ID" }"
+    //             -(on fail):{ status: 404, Message: "No Old Instructor with this ID" }
+    //             -(on success:{ status: 200, Message: "This Instructor already has this work shop" })
+    //             -(on success):{ status: 200, Message: "This WorkShop already has this Instructor" }
+    //             -(on success):{ status: 200, Message: "WorkShop Instructor Updated sucessfully" }
+    //             */
+    // app.put('/UnAssignWorkShop', async (request, response) => {
+    //     try {
+    //         let { WorkShopID, InstructorID } = request.body
 
-            const WorkShopObj = await WorkShopModel.findById({ _id: WorkShopID })
-            if (WorkShopObj == null)
-                return response.send({ status: 404, Message: "No WorkShop with this ID" })
+    //         const WorkShopObj = await WorkShopModel.findById({ _id: WorkShopID })
+    //         if (WorkShopObj == null)
+    //             return response.send({ status: 404, Message: "No WorkShop with this ID" })
 
-            const OldInstructor = WorkShopObj.Instructor_ID
-            if (OldInstructor != -1) {
-                //there is old
-                //1.Remove This Work Shop from this Old Instructor's Workshops
-                const InstructorObj = await InstrctorModel.findOneAndUpdate({ _id: OldInstructor }, { $pull: { WorkShops: WorkShopObj._id } })
-                if (InstructorObj == null)
-                    return response.send({ status: 404, Message: "No Old Instructor with this ID" })
-            }
-            //2.Add this WorkShop to the New instructor
-            if (InstructorID != "-1") {
-                //there is a new instructor
-                //3.add this work Shop to this New Instructor Workshops Array
-                const InstructorQuery = await InstrctorModel.updateOne({ _id: InstructorID }, { $addToSet: { WorkShops: WorkShopObj._id } })
-                if (InstructorQuery.matchedCount <= 0)
-                    return response.send({ status: 404, Message: "No Insrtuctor with this id" })
+    //         const OldInstructor = WorkShopObj.Instructor_ID
+    //         if (OldInstructor != -1) {
+    //             //there is old
+    //             //1.Remove This Work Shop from this Old Instructor's Workshops
+    //             const InstructorObj = await InstrctorModel.findOneAndUpdate({ _id: OldInstructor }, { $pull: { WorkShops: WorkShopObj._id } })
+    //             if (InstructorObj == null)
+    //                 return response.send({ status: 404, Message: "No Old Instructor with this ID" })
+    //         }
+    //         //2.Add this WorkShop to the New instructor
+    //         if (InstructorID != "-1") {
+    //             //there is a new instructor
+    //             //3.add this work Shop to this New Instructor Workshops Array
+    //             const InstructorQuery = await InstrctorModel.updateOne({ _id: InstructorID }, { $addToSet: { WorkShops: WorkShopObj._id } })
+    //             if (InstructorQuery.matchedCount <= 0)
+    //                 return response.send({ status: 404, Message: "No Insrtuctor with this id" })
 
-                if (InstructorQuery.modifiedCount <= 0)
-                    return response.send({ status: 200, Message: "This Instructor already has this work shop" })
-            }
-            //4.Update the Instructor_ID in the workshop with the InstructorID
-            const WorkShopQuery = await WorkShopModel.updateOne({ _id: WorkShopID }, { $set: { Instructor_ID: InstructorID } })
+    //             if (InstructorQuery.modifiedCount <= 0)
+    //                 return response.send({ status: 200, Message: "This Instructor already has this work shop" })
+    //         }
+    //         //4.Update the Instructor_ID in the workshop with the InstructorID
+    //         const WorkShopQuery = await WorkShopModel.updateOne({ _id: WorkShopID }, { $set: { Instructor_ID: InstructorID } })
 
-            if (WorkShopQuery.matchedCount <= 0)
-                return response.send({ status: 404, Message: "No WorkShop with this id" })
-            if (WorkShopQuery.modifiedCount <= 0)
-                return response.send({ status: 200, Message: "This WorkShop already has this Instructor" })
+    //         if (WorkShopQuery.matchedCount <= 0)
+    //             return response.send({ status: 404, Message: "No WorkShop with this id" })
+    //         if (WorkShopQuery.modifiedCount <= 0)
+    //             return response.send({ status: 200, Message: "This WorkShop already has this Instructor" })
 
-            return response.send({ status: 200, Message: "WorkShop Instructor Updated sucessfully" })
-        }
-        catch (error) {
-            return response.send({ status: -1, Message: error })
-        }
-    })
+    //         return response.send({ status: 200, Message: "WorkShop Instructor Updated sucessfully" })
+    //     }
+    //     catch (error) {
+    //         return response.send({ status: -1, Message: error })
+    //     }
+    // })
 
 
 
@@ -232,15 +233,16 @@ module.exports = (app) => {
             //2.WorkShopInstructor
             if (WorkShop.Instructor_ID) {
                 //update Instructor
-                await axios.put("http://localhost:5000/UnAssignWorkShop", { WorkShopID: WorkShop._id, InstructorID: WorkShop.Instructor_ID }).then((res) => {
-                    if (res.data.status != 200)
-                        return response.send(res.data)
-                })
+                // await axios.put("http://localhost:5000/UnAssignWorkShop", { WorkShopID: WorkShop._id, InstructorID: WorkShop.Instructor_ID }).then((res) => {
+                let res = await lib.UnAssignWorkShop(WorkShop._id, WorkShop.Instructor_ID);
+                if (res.status != 200)
+                    return response.send(res)
+                // })
             }
 
             //3.Update WorkShop
             await WorkShopModel.findByIdAndUpdate({ _id: WorkShop._id }, { $set: WorkShop })
-            return response.send({ status: 200, Message: "WorkShop Updated Sucessfully"})
+            return response.send({ status: 200, Message: "WorkShop Updated Sucessfully" })
         }
         catch (error) {
             return response.send({ status: -1, Message: error })

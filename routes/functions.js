@@ -36,7 +36,7 @@ const UpdateUserFunction = async (User) => {
     try {
         // const { User } = request.body
         const user_NameCollection = await UserModel.find({ _id: User._id })
-      
+
 
         if (user_NameCollection.length > 0) {
             //is User_Name Updated
@@ -83,13 +83,55 @@ const UpdateUserFunction = async (User) => {
         }
     }
     catch (error) {
-        return response.send({ status: -1, Message: error })
+        return { status: -1, Message: error }
     }
 }
 
 
-module.exports={
-    addUserFunction:addUserFunction,
-    UpdateUserFunction:UpdateUserFunction
+const UnAssignWorkShop = async (WorkShopID, InstructorID) => {
+    try {
+        // let { WorkShopID, InstructorID } = request.body
+
+        const WorkShopObj = await WorkShopModel.findById({ _id: WorkShopID })
+        if (WorkShopObj == null)
+            return { status: 404, Message: "No WorkShop with this ID" }
+
+        const OldInstructor = WorkShopObj.Instructor_ID
+        if (OldInstructor != -1) {
+            //there is old
+            //1.Remove This Work Shop from this Old Instructor's Workshops
+            const InstructorObj = await InstrctorModel.findOneAndUpdate({ _id: OldInstructor }, { $pull: { WorkShops: WorkShopObj._id } })
+            if (InstructorObj == null)
+                return { status: 404, Message: "No Old Instructor with this ID" }
+        }
+        //2.Add this WorkShop to the New instructor
+        if (InstructorID != "-1") {
+            //there is a new instructor
+            //3.add this work Shop to this New Instructor Workshops Array
+            const InstructorQuery = await InstrctorModel.updateOne({ _id: InstructorID }, { $addToSet: { WorkShops: WorkShopObj._id } })
+            if (InstructorQuery.matchedCount <= 0)
+                return { status: 404, Message: "No Insrtuctor with this id" }
+
+            if (InstructorQuery.modifiedCount <= 0)
+                return { status: 200, Message: "This Instructor already has this work shop" }
+        }
+        //4.Update the Instructor_ID in the workshop with the InstructorID
+        const WorkShopQuery = await WorkShopModel.updateOne({ _id: WorkShopID }, { $set: { Instructor_ID: InstructorID } })
+
+        if (WorkShopQuery.matchedCount <= 0)
+            return { status: 404, Message: "No WorkShop with this id" }
+        if (WorkShopQuery.modifiedCount <= 0)
+            return { status: 200, Message: "This WorkShop already has this Instructor" }
+
+        return { status: 200, Message: "WorkShop Instructor Updated sucessfully" }
+    }
+    catch (error) {
+        return { status: -1, Message: error }
+    }
+}
+
+module.exports = {
+    addUserFunction: addUserFunction,
+    UpdateUserFunction: UpdateUserFunction
 
 }
