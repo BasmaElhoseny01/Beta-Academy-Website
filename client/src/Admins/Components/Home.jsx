@@ -405,7 +405,7 @@ function Home({ User }) {
                     <h4>Status</h4>
                     <select defaultValue={"default"} onChange={(e) => { NewWorkShop.Status = (e.target.value) }}>
                         <option value="default" disabled>Select Status</option>
-                        <option value="Avaliable">🟢 Avaliable</option>
+                        <option value="Available">🟢 Available</option>
                         <option value="Full">🔴 Full</option>
                         <option value="Past">⚫ Past</option>
                     </select>
@@ -712,7 +712,7 @@ function Home({ User }) {
                     <h4>Status</h4>
                     <select defaultValue={"default"} onChange={(e) => { NewEditedWorkShop.Status = (e.target.value) }} disabled={Edit == false}>
                         <option value="default" disabled>{EditedWorkShop && Object.keys(EditedWorkShop).length === 0 ? "Select Status" : EditedWorkShop.Status}</option>
-                        <option value="Avaliable">🟢 Avaliable</option>
+                        <option value="Available">🟢 Available</option>
                         <option value="Full">🔴 Full</option>
                         <option value="Past">⚫ Past</option>
                     </select>

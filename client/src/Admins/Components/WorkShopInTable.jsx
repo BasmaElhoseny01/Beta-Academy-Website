@@ -17,7 +17,7 @@ function WorkShopInTable({ WorkShopID, InstructorName }) {
 
             if (response.data.WorkShopObj[0].Status === "Past")
                 setStatus("⚫")
-            else if (response.data.WorkShopObj[0].Status === "Avaliable")
+            else if (response.data.WorkShopObj[0].Status === "Available")
                 setStatus("🟢")
 
             else if (response.data.WorkShopObj[0].Status === "Full")

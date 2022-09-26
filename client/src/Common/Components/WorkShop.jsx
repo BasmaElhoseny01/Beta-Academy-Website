@@ -19,8 +19,8 @@ function WorkShop({ WorkShopID, SeeFlag, WorkShop }) {
             setWorkShop(WorkShop)
             if (WorkShop.Status == "Past")
                 setStatus("⚫ Past")
-            else if (WorkShop.Status == "Avaliable")
-                setStatus("🟢  Avaliable")
+            else if (WorkShop.Status == "Available")
+                setStatus("🟢  Available")
 
             else if (WorkShop.Status == "Full")
                 setStatus("🔴 Full")
@@ -62,8 +62,8 @@ function WorkShop({ WorkShopID, SeeFlag, WorkShop }) {
 
                 if (response.data.WorkShopObj[0].Status == "Past")
                     setStatus("⚫ Past")
-                else if (response.data.WorkShopObj[0].Status == "Avaliable")
-                    setStatus("🟢  Avaliable")
+                else if (response.data.WorkShopObj[0].Status == "Available")
+                    setStatus("🟢  Available")
 
                 else if (response.data.WorkShopObj[0].Status == "Full")
                     setStatus("🔴 Full")
