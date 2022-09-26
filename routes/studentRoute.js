@@ -27,6 +27,7 @@ module.exports = (app) => {
                 if (Studentobj.length > 0)
                     return response.send({ status: 402, Message: "Student Name Already Exists" })
                 else {
+                    /////////////here
                     //else unique 
                     //1.add user
                     let newUser;

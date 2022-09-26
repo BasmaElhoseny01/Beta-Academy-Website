@@ -40,6 +40,7 @@ module.exports = (app) => {
             //     if (APIresponse.data.status != 200) {
             //         return response.send(APIresponse.data)
             //     }
+            ///////////////////here
             let newUser;
             let res =await  lib.addUserFunction(User_Name,"0000", "Instructor");
              if (res.status != 200) {
