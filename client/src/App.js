@@ -1,5 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import Home from './Common/Components/Home';
 
@@ -13,6 +14,10 @@ import Student from './Students/Components/Student';
 import Footer from './Common/Components/Footer';
 
 function App() {
+  useEffect(() => {
+    document.title = "Beta Academy"
+  }, [])
+  
   return (
     <div className="App">
       <Router>
