@@ -25,9 +25,6 @@ function Profile({ Instructor, User }) {
     axios.put("/UpdateInstructor", { Instructor: NewIntructor, User: NewUser }).then((response) => {
       alert(response.data.Message)
 
-      console.log('form submitted ✅');
-      console.log(NewIntructor)
-
       window.location.href = './';
     }).catch((error)=>alert(error))
   };
@@ -148,16 +145,6 @@ function Profile({ Instructor, User }) {
             }}
           />
         </div>
-
-        {/* Salary */}
-        <div className='RowProfile'>
-          <h4>Salary</h4>
-          <input enabled="false"
-            type="Number"
-            placeholder={Instructor.Salary + " LE"}
-          />
-        </div>
-
 
         {/* User_Name */}
         <div className='RowProfile'>

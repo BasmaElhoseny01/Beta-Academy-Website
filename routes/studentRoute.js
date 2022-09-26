@@ -13,7 +13,6 @@ const lib = require('./functions')
 module.exports = (app) => {
 
     //A.Add Student
-    //A.Add Student
     app.post("/AddStudent", async (request, response) => {
         try {
 
@@ -32,7 +31,7 @@ module.exports = (app) => {
                     //1.add user
                     let newUser;
                     // await axios.post("http://localhost:5000/AddUser", { User_Name, Password, Type: "Student" }).then((res) => {
-                    let res = await addUserFunction(User_Name, Password, "Student");
+                    let res = await lib.addUserFunction(User_Name, Password, "Student");
                     if (res.status != 200) {
                         return response.send(res)
                     }
@@ -223,8 +222,8 @@ module.exports = (app) => {
                 return response.send({ status: 404, Message: "No Student with this ID" })
             }
             // await axios.put("./UpdateUser", { User }).then(async (res) => {
-            let res = lib.UpdateUserFunction(User);
-            if ((await res).status != 200) {
+            let res = await lib.UpdateUserFunction(User);
+            if (res.status != 200) {
                 return response.send(res)
             }
             else {

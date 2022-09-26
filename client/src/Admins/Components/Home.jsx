@@ -21,6 +21,9 @@ function Home({ User }) {
 
     const [NewEditedWorkShop, setNewEditedWorkShop] = useState({})
 
+    const [NewEditedInsructor, setNewEditedInsructor] = useState({_id:"default",Salary: "" })
+    const [NewInstructorUser, setNewInstructorUser] = useState({})
+
     const [WorkShops, setWorkShops] = useState([])
     const [WorkShopDeleted, setWorkShopDeleted] = useState("")
 
@@ -164,6 +167,22 @@ function Home({ User }) {
             alert(response.data.Message)
             window.location.reload();
         }).catch((error) => alert(error))
+    }
+
+    const EditInsructor = (event) => {
+        // 👇️ prevent page refresh
+        event.preventDefault();
+        if (NewEditedInsructor.Salary == "" ||NewEditedInsructor._id=="default") {
+            alert("Please Fill All fields")
+            return
+        }
+        let obj = Instructors.find(o => o._id == NewEditedInsructor._id);
+        NewInstructorUser._id = obj.User_ID;
+        axios.put("/UpdateInstructor", { Instructor: NewEditedInsructor, User: NewInstructorUser }).then((response) => {
+            alert(response.data.Message)
+            window.location.reload();
+        }).catch((error) => alert(error))
+
     }
 
     const UnEnroll = (event) => {
@@ -706,14 +725,43 @@ function Home({ User }) {
                     <button type='submit'>Edit WorkShop</button>
                 </div>
             </form>
-            {/* <select defaultValue={"12345"}>
-                <option >125</option>
-                <option>45</option>
-                <option value="12345">52</option>
-                <option>125</option>
 
+            {/* ********************************************************************************************************** */}
+            <form onSubmit={EditInsructor}>
+                <h2 className='WorkShopsContainerTitle'>Edit Instructor</h2>
+                <hr className='HorizontalLine' />
 
-            </select> */}
+                {/* Instructor */}
+                <div className='RowProfileAdmin'>
+                    <h4>Instructor</h4>
+                    <select defaultValue={"default"} onChange={(e) => {
+                        NewEditedInsructor._id = (e.target.value)
+                    }}>
+                        <option value="default" disabled>Select Instructor</option>
+                        {Instructors ? Instructors.map((item) => {
+                            return (<option value={item._id} key={item._id}>{item.Name}</option>)
+                        }) : null}
+                    </select>
+                </div>
+
+                {/* Salary */}
+                <div className='RowProfileAdmin'>
+                    <h4>Salary</h4>
+                    <input
+                        type="number"
+                        placeholder="1350"
+                        onChange={event => {
+                            NewEditedInsructor.Salary = event.target.value.trim()
+                        }}
+                        min={0}
+                    />
+                </div>
+
+                <div className="ProfileButtonsAdmin">
+                    <button type='submit'>Edit Salary</button>
+                </div>
+            </form>
+
 
             {/* *******************************************************************************88 */}
             <form onSubmit={UnEnroll}>
@@ -840,5 +888,4 @@ function Home({ User }) {
         </div>
     )
 }
-
 export default Home

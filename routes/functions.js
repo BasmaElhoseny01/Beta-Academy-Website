@@ -1,16 +1,18 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt")
+
 const StudentModel = mongoose.model("Students");
+const InstrctorModel = mongoose.model("Instructors")
 const UserModel = mongoose.model("Users");
 const WorkShopModel = mongoose.model("WorkShops");
 
+
 const addUserFunction = async (User_Name, Password, Type) => {
     try {
-
         const UserObj = await UserModel.find({ User_Name });
 
         if (UserObj.length > 0)
             return ({ status: 402, Message: "Username Already Exists", newUser: UserObj })
-
         //else unique username
         if (Password) {
             const salt = await bcrypt.genSalt(10)
@@ -18,7 +20,7 @@ const addUserFunction = async (User_Name, Password, Type) => {
         }
         const newUser = new UserModel({
             User_Name,
-            Password,
+            Password:Password,
             Type: Type
         })
         await newUser.save()
@@ -91,11 +93,9 @@ const UpdateUserFunction = async (User) => {
 const UnAssignWorkShop = async (WorkShopID, InstructorID) => {
     try {
         // let { WorkShopID, InstructorID } = request.body
-
         const WorkShopObj = await WorkShopModel.findById({ _id: WorkShopID })
         if (WorkShopObj == null)
             return { status: 404, Message: "No WorkShop with this ID" }
-
         const OldInstructor = WorkShopObj.Instructor_ID
         if (OldInstructor != -1) {
             //there is old
@@ -109,6 +109,7 @@ const UnAssignWorkShop = async (WorkShopID, InstructorID) => {
             //there is a new instructor
             //3.add this work Shop to this New Instructor Workshops Array
             const InstructorQuery = await InstrctorModel.updateOne({ _id: InstructorID }, { $addToSet: { WorkShops: WorkShopObj._id } })
+            
             if (InstructorQuery.matchedCount <= 0)
                 return { status: 404, Message: "No Insrtuctor with this id" }
 
@@ -132,6 +133,6 @@ const UnAssignWorkShop = async (WorkShopID, InstructorID) => {
 
 module.exports = {
     addUserFunction: addUserFunction,
-    UpdateUserFunction: UpdateUserFunction
-
+    UpdateUserFunction: UpdateUserFunction,
+    UnAssignWorkShop:UnAssignWorkShop
 }

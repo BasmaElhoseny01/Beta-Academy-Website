@@ -6,6 +6,8 @@ const UserModel = mongoose.model("Users")
 const WorkShopModel = mongoose.model("WorkShops")
 const StudentModel = mongoose.model("Students")
 
+const lib = require('./functions')
+
 module.exports = (app) => {
     //A.Add instructor
     /*Input [Name, Mobile, Email, Study, Salary, User_Name] 
@@ -39,32 +41,32 @@ module.exports = (app) => {
             //         return response.send(APIresponse.data)
             //     }
             let newUser;
-            let res = addUserFunction( User_Name, Password,"Student");
-            if ((await res).status != 200) {
+            let res =await  lib.addUserFunction(User_Name,"0000", "Instructor");
+             if (res.status != 200) {
                 return response.send(res)
             }
-            else{
+            else {
                 newUser = res.newUser;
-                }
+            }
 
-                //2.Add Instructor
-                const newInstructor = new InstrctorModel({
-                    Name,
-                    Mobile,
-                    Email,
-                    Study,
-                    Salary,
-                    User_ID: newUser._id
-                })
-                await newInstructor.save()
+            //2.Add Instructor
+            const newInstructor = new InstrctorModel({
+                Name,
+                Mobile,
+                Email,
+                Study,
+                Salary,
+                User_ID: newUser._id
+            })
+            await newInstructor.save()
 
-                //3.Update User with the new aaded row id
-                const updateduserCollection = await UserModel.updateOne({ _id: newUser._id }, { $set: { User_ID: newInstructor._id } })
-                if (updateduserCollection.modifiedCount > 0) {
-                    return response.send({ status: 200, Message: "Instructor Added Sucessfully" })
-                }
-                return response.send({ status: 402, Message: "Error Happend in Last Step" })
-           // })
+            //3.Update User with the new aaded row id
+            const updateduserCollection = await UserModel.updateOne({ _id: newUser._id }, { $set: { User_ID: newInstructor._id } })
+            if (updateduserCollection.modifiedCount > 0) {
+                return response.send({ status: 200, Message: "Instructor Added Sucessfully" })
+            }
+            return response.send({ status: 402, Message: "Error Happend in Last Step" })
+            // })
         }
         catch (error) {
             return response.send({ status: -1, Message: error })
@@ -94,7 +96,7 @@ module.exports = (app) => {
             return response.send({ status: 404, Message: "Instructor Not Found" })
         }
         catch (err) {
-            return response.send({ status: -1, Message:err })
+            return response.send({ status: -1, Message: err })
         }
     });
 
@@ -116,40 +118,40 @@ module.exports = (app) => {
             }
 
             // await axios.put("http://localhost:5000/UpdateUser", { User }).then(async (res) => {
-                let res = UpdateUserFunction(User);
-                if ((await res).status != 200) {
-                    return response.send(res)
-                }
-                else{
-                    const updatedUserCollection = res.data.updatedUserCollection
-                    if (Instructor.Name) {
-                        const NameInstructorCollection = await InstrctorModel.find({ Name: Instructor.Name })
-                        if (NameInstructorCollection.length > 0) {
-                            if (Instructor._id == NameInstructorCollection[0]._id) {
-                                //he uses his old name no problem
-                                const updatedInsrtuctorCollection = await InstrctorModel.findByIdAndUpdate({ _id: Instructor._id }, { $set: Instructor })
-                                return response.send({ status: 200, Message: "Instructor Updated Sucessfully" })
-                            }
-                            else {
-                                return response.send({ status: 405, Message: "Instructor Name already Exists" })
-                            }
-                        }
-                        else {
-                            //completey new Name
+            let res = await lib.UpdateUserFunction(User);
+            if (res.status != 200) {
+                return response.send(res)
+            }
+            else {
+                const updatedUserCollection = res.updatedUserCollection
+                if (Instructor.Name) {
+                    const NameInstructorCollection = await InstrctorModel.find({ Name: Instructor.Name })
+                    if (NameInstructorCollection.length > 0) {
+                        if (Instructor._id == NameInstructorCollection[0]._id) {
+                            //he uses his old name no problem
                             const updatedInsrtuctorCollection = await InstrctorModel.findByIdAndUpdate({ _id: Instructor._id }, { $set: Instructor })
                             return response.send({ status: 200, Message: "Instructor Updated Sucessfully" })
                         }
+                        else {
+                            return response.send({ status: 405, Message: "Instructor Name already Exists" })
+                        }
                     }
                     else {
-                        //No change in name update directly
+                        //completey new Name
                         const updatedInsrtuctorCollection = await InstrctorModel.findByIdAndUpdate({ _id: Instructor._id }, { $set: Instructor })
                         return response.send({ status: 200, Message: "Instructor Updated Sucessfully" })
                     }
                 }
+                else {
+                    //No change in name update directly
+                    const updatedInsrtuctorCollection = await InstrctorModel.findByIdAndUpdate({ _id: Instructor._id }, { $set: Instructor })
+                    return response.send({ status: 200, Message: "Instructor Updated Sucessfully" })
+                }
+            }
             // });
         }
         catch (error) {
-            return response.send({ status: -1, Message:error })
+            return response.send({ status: -1, Message: error })
         }
     });
 
@@ -231,7 +233,7 @@ module.exports = (app) => {
             const WorkShops = InstObj[0].WorkShops
 
             //get all students
-            const Students =await StudentModel.find({})
+            const Students = await StudentModel.find({})
 
             if (Students) {
                 //loop over all students
