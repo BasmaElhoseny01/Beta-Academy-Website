@@ -58,7 +58,7 @@ function WorkShop({ WorkShopID, SeeFlag, WorkShop }) {
                 setWorkShop(response.data.WorkShopObj[0])
                 setInstructor(response.data.InstructorObj)
                 // console.log(response.data.InstructorObj)
-            
+              {/* Available */}
 
                 if (response.data.WorkShopObj[0].Status == "Past")
                     setStatus("⚫ Past")

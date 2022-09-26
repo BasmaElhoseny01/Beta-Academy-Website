@@ -14,7 +14,7 @@ function WorkShopInTable({ WorkShopID, InstructorName }) {
                 return;
             }
             setWorkShop(response.data.WorkShopObj[0])
-
+  {/* Available */}
             if (response.data.WorkShopObj[0].Status === "Past")
                 setStatus("⚫")
             else if (response.data.WorkShopObj[0].Status === "Available")

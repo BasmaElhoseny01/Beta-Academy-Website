@@ -401,6 +401,7 @@ function Home({ User }) {
 
 
                 {/* Status */}
+            {/* Available */}
                 <div className='RowProfileAdmin'>
                     <h4>Status</h4>
                     <select defaultValue={"default"} onChange={(e) => { NewWorkShop.Status = (e.target.value) }}>
